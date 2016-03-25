@@ -1,4 +1,4 @@
-/* <%= flowDeclaration %> */
+/* @flow */
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -9,7 +9,7 @@ export const ACTIONTYPE = 'ACTIONTYPE'
 // NOTE: "Action" is a Flow interface defined in https://github.com/TechnologyAdvice/flow-interfaces
 // If you're unfamiliar with Flow, you are completely welcome to avoid annotating your code, but
 // if you'd like to learn more you can check out: flowtype.org.
-export const <%= camelEntityName %>Action = (payload: Object): Action => ({
+export const residentsAction = (payload: Object): Action => ({
   type: ACTIONTYPE,
   payload: payload
 })
@@ -20,7 +20,7 @@ export const <%= camelEntityName %>Action = (payload: Object): Action => ({
 // NOTE: This is solely for demonstration purposes. In a real application,
 // you'd probably want to dispatch an action and let the
 // reducer take care of this logic.
-export const request<%= pascalEntityName %> = (): Function => {
+export const requestResidents = (): Function => {
   return (dispatch: Function, getState: Function): Promise => {
     return new Promise((resolve: Function): void => {
       setTimeout(() => {
@@ -31,28 +31,37 @@ export const request<%= pascalEntityName %> = (): Function => {
 }
 
 export const actions = {
-  <%= camelEntityName %>Action,
-  request<%= pascalEntityName %>
+  residentsAction,
+  requestResidents
 }
 
 // ------------------------------------
 // Model
 // ------------------------------------
-export type <%= pascalEntityName %>Schema = {};
+export type ResidentSchema = {
+  id: number,
+  name: string,
+  unit: string
+};
+export type ResidentsSchema = Array<ResidentSchema>;
 
-const initialState: <%= pascalEntityName %>Schema = {}
+const initialState: ResidentsSchema = [
+  {id: 1, name: 'Bob', unit: 'A'},
+  {id: 2, name: 'Julia', unit: 'B'},
+  {id: 3, name: 'Simon', unit: 'C'}
+]
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ACTIONTYPE]: (state: <%= pascalEntityName %>Schema, action): <%= pascalEntityName %>Schema => ({...state, ...action.payload})
+  [ACTIONTYPE]: (state: ResidentsSchema, action): ResidentsSchema => initialState
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export default function <%= camelEntityName %>Reducer (state: <%= pascalEntityName %>Schema = initialState, action: Action): <%= pascalEntityName %>Schema {
+export default function residentsReducer (state: ResidentsSchema = initialState, action: Action): ResidentsSchema {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 }

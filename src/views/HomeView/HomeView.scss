@@ -1,0 +1,28 @@
+.main {
+  border: medium solid orange;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.top {
+  border: thin solid purple;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.date-and-menu {
+  display: flex;
+  height: 150px;
+  border: thin dashed green;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.cooks-and-signups {
+  display: flex;
+  border: thin solid gray;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.middle {
+  display: flex;
+  min-height: 500px;
+  justify-content: space-between;
+}

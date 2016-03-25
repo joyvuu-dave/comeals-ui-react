@@ -1,0 +1,13 @@
+.date-box {
+  flex-basis: 40%;
+  border: thin solid cyan;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.date-box-container {
+  display: flex;
+  height: 100px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
