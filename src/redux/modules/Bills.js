@@ -2,15 +2,19 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const ACTIONTYPE = 'ACTIONTYPE'
+export const UPDATE_BILL = 'UPDATE_BILL'
+export const UPDATE_COST = 'UPDATE_COST'
+
 // ------------------------------------
 // Actions
 // ------------------------------------
-// NOTE: "Action" is a Flow interface defined in https://github.com/TechnologyAdvice/flow-interfaces
-// If you're unfamiliar with Flow, you are completely welcome to avoid annotating your code, but
-// if you'd like to learn more you can check out: flowtype.org.
-export const billsAction = (payload: Object): Action => ({
-  type: ACTIONTYPE,
+export const updateBill = (payload: Object): Action => ({
+  type: UPDATE_BILL,
+  payload: payload
+})
+
+export const updateCost = (payload: Object): Action => ({
+  type: UPDATE_COST,
   payload: payload
 })
 
@@ -31,7 +35,8 @@ export const requestBills = (): Function => {
 }
 
 export const actions = {
-  billsAction,
+  updateBill,
+  updateCost,
   requestBills
 }
 
@@ -43,17 +48,62 @@ export type BillSchema = {
   resident_id: number,
   amount: number
 };
-export type BillsSchema = Array<BillSchema>;
+export type BillsSchema = {
+  '1': ?BillSchema,
+  '2': ?BillSchema,
+  '3': ?BillSchema
+};
 
-const initialState: BillsSchema = [
-    {id: 1, resident_id: 1, amount: 65.42}
-]
+const initialState: BillsSchema = {
+  '1': {
+    id: 11,
+    resident_id: 1,
+    amount: 111.11
+  },
+  '2': {
+    id: 22,
+    resident_id: 2,
+    amount: 222.22
+  },
+  '3': {
+    id: 33,
+    resident_id: 3,
+    amount: 333.33
+  }
+}
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ACTIONTYPE]: (state: BillsSchema, action): BillsSchema => initialState
+  [UPDATE_BILL]: (state: BillsSchema, action): BillsSchema => {
+    if (action.payload.resident_id) {
+      if (action.payload.num === 1) {
+        /* eslint-disable max-len */
+        return Object.assign({}, state, {'1': Object.assign({}, state[action.payload.num], {resident_id: Number(action.payload.resident_id)})})
+      } else if (action.payload.num === 2) {
+        /* eslint-disable max-len */
+        return Object.assign({}, state, {'2': Object.assign({}, state[action.payload.num], {resident_id: Number(action.payload.resident_id)})})
+      } else {
+        /* eslint-disable max-len */
+        return Object.assign({}, state, {'3': Object.assign({}, state[action.payload.num], {resident_id: Number(action.payload.resident_id)})})
+      }
+    } else {
+      return Object.assign({}, state[action.payload.num], null)
+    }
+  },
+  [UPDATE_COST]: (state: BillSchema, action): BillsSchema => {
+    if (action.payload.num === 1) {
+      /* eslint-disable max-len */
+      return Object.assign({}, state, {'1': Object.assign({}, state[action.payload.num], {amount: Number(action.payload.amount)})})
+    } else if (action.payload.num === 2) {
+      /* eslint-disable max-len */
+      return Object.assign({}, state, {'2': Object.assign({}, state[action.payload.num], {amount: Number(action.payload.amount)})})
+    } else {
+      /* eslint-disable max-len */
+      return Object.assign({}, state, {'3': Object.assign({}, state[action.payload.num], {amount: Number(action.payload.amount)})})
+    }
+  }
 }
 
 // ------------------------------------

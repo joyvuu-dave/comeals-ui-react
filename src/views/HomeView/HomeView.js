@@ -3,7 +3,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import classes from './HomeView.scss'
 
-import { mealAction } from '../../redux/modules/Meal'
+// Actions
+import { updateDescription, updateExtras, closeMeal } from '../../redux/modules/Meal'
+import { updateBill, updateCost } from '../../redux/modules/Bills'
 
 // Components
 import DateBox from '../../components/DateBox/DateBox'
@@ -29,7 +31,11 @@ type Props = {
   bills: BillsSchema,
   guests: GuestsSchema,
   ui: ReducedUISchema,
-  mealAction: Function
+  updateDescription: Function,
+  updateExtras: Function,
+  closeMeal: Function,
+  updateBill: Function,
+  updateCost: Function
 };
 
 export class HomeView extends React.Component<void, Props, void> {
@@ -42,14 +48,17 @@ export class HomeView extends React.Component<void, Props, void> {
             <Menu
               disabled={this.props.ui.menu_textarea.disabled}
               description={this.props.meal.description}
-              handleDescriptionUpdate={this.props.mealAction} />
+              handleDescriptionUpdate={this.props.updateDescription} />
           </section>
           <section className={classes['cooks-and-signups']}>
-            <Cooks residents={this.props.residents} bills={this.props.bills} />
+            <Cooks residents={this.props.residents} bills={this.props.bills}
+              updateBill={this.props.updateBill} updateCost={this.props.updateCost} />
             <Signups omnivore={this.props.meal.omnivore}
               vegetarian={this.props.meal.vegetarian}
               late={this.props.meal.late} />
-            <Extra extras={this.props.meal.extras} auto_close={this.props.meal.auto_close} />
+            <Extra extras={this.props.meal.extras} auto_close={this.props.meal.auto_close}
+              updateExtras={this.props.updateExtras}
+              closeMeal={this.props.closeMeal} />
           </section>
         </section>
         <section className={classes.middle}>
@@ -124,5 +133,9 @@ function mapStateToProps (state) {
 }
 
 export default connect((mapStateToProps), {
-  mealAction
+  updateDescription,
+  updateExtras,
+  closeMeal,
+  updateBill,
+  updateCost
 })(HomeView)

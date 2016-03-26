@@ -2,25 +2,38 @@
 import React from 'react'
 import classes from './Cook.scss'
 
-function handleSelectChange () {
-  console.log('select changed...')
-}
-
-function handleInputChange () {
-  console.log('input change...')
-}
-
 // Schema
 import type { ResidentsSchema } from '../../redux/modules/Residents'
 import type { BillSchema } from '../../redux/modules/Bills'
 
 type Props = {
-  first: string,
+  num: number,
   residents: ResidentsSchema,
-  bill: BillSchema
+  bill: BillSchema,
+  updateBill: Function,
+  updateCost: Function
 };
 
 export class Cook extends React.Component<void, Props, void> {
+  constructor () {
+    super()
+    this.handleSelectChange = this.handleSelectChange.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+  }
+
+  handleSelectChange (e) {
+    this.props.updateBill({
+      num: this.props.num,
+      resident_id: e.target.value
+    })
+  }
+
+  handleInputChange (e) {
+    this.props.updateCost({
+      num: this.props.num,
+      amount: e.target.value
+    })
+  }
 
   renderOptions () {
     return this.props.residents.map((r) =>
@@ -37,8 +50,8 @@ export class Cook extends React.Component<void, Props, void> {
       <section>
         <select className={classes['cook-select']}
           defaultValue={this.props.bill ? this.props.bill.resident_id : ''}
-          onChange={handleSelectChange}>
-          <option>{this.props.first}</option>
+          onChange={this.handleSelectChange}>
+          <option value=''>Cook {this.props.num}</option>
           {this.renderOptions()}
         </select>
 
@@ -49,7 +62,7 @@ export class Cook extends React.Component<void, Props, void> {
           step='0.01'
           placeholder='food cost'
           defaultValue={this.props.bill ? this.props.bill.amount : ''}
-          onChange={handleInputChange} />
+          onChange={this.handleInputChange} />
       </section>
     )
   }

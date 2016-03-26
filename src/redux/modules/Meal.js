@@ -1,16 +1,25 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const ACTIONTYPE = 'ACTIONTYPE'
+export const UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION'
+export const UPDATE_EXTRAS = 'UPDATE_EXTRAS'
+export const CLOSE_MEAL = 'CLOSE_MEAL'
+
 // ------------------------------------
 // Actions
 // ------------------------------------
-// NOTE: "Action" is a Flow interface defined in https://github.com/TechnologyAdvice/flow-interfaces
-// If you're unfamiliar with Flow, you are completely welcome to avoid annotating your code, but
-// if you'd like to learn more you can check out: flowtype.org.
-export const mealAction = (payload: Object): Action => ({
-  type: ACTIONTYPE,
+export const updateDescription = (payload: string): Action => ({
+  type: UPDATE_DESCRIPTION,
   payload: payload
+})
+
+export const updateExtras = (payload: string): Action => ({
+  type: UPDATE_EXTRAS,
+  payload: payload
+})
+
+export const closeMeal = (payload: string): Action => ({
+  type: CLOSE_MEAL
 })
 
 // This is a thunk, meaning it is a function that immediately
@@ -30,7 +39,9 @@ export const requestMeal = (): Function => {
 }
 
 export const actions = {
-  mealAction,
+  updateDescription,
+  updateExtras,
+  closeMeal,
   requestMeal
 }
 
@@ -83,7 +94,10 @@ const initialState: MealSchema = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ACTIONTYPE]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload})
+  /* eslint-disable max-len */
+  [UPDATE_DESCRIPTION]: (state: MealSchema, action): MealSchema => Object.assign({}, state, {description: action.payload}),
+  [UPDATE_EXTRAS]: (state: MealSchema, action): MealSchema => Object.assign({}, state, {extras: Number(action.payload)}),
+  [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => Object.assign({}, state, Object.assign({}, state.status, {closed: true}))
 }
 
 // ------------------------------------

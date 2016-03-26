@@ -9,6 +9,15 @@ type Props = {
 };
 
 export class Menu extends React.Component<void, Props, void> {
+  constructor () {
+    super()
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange (e) {
+    this.props.handleDescriptionUpdate(e.target.value.trim())
+  }
+
   render () {
     return (
       <textarea
@@ -16,7 +25,7 @@ export class Menu extends React.Component<void, Props, void> {
         className={classes.menu}
         placeholder='Menu'
         value={this.props.description}
-        onChange={this.props.handleDescriptionUpdate}>
+        onChange={this.handleChange}>
       </textarea>
     )
   }

@@ -2,24 +2,27 @@
 import React from 'react'
 import classes from './Extra.scss'
 
-function handleInputChange () {
-  console.log('extra count change...')
-}
-
-function handleMealClose () {
-  console.log('close meal...')
-}
-
 function handleAutoCloseChange () {
   console.log('change in auto-close status...')
 }
 
 type Props = {
   extras: number,
-  auto_close: boolean
+  auto_close: boolean,
+  updateExtras: Function,
+  closeMeal: Function
 };
 
 export class Extra extends React.Component<void, Props, void> {
+  constructor () {
+    super()
+    this.handleExtrasChange = this.handleExtrasChange.bind(this)
+  }
+
+  handleExtrasChange (e) {
+    this.props.updateExtras(e.target.value)
+  }
+
   render () {
     return (
       <section className={classes.extra}>
@@ -27,8 +30,8 @@ export class Extra extends React.Component<void, Props, void> {
           <h3 className={classes['extra-title']}>Extras</h3>
           <input className={classes['extra-input']}
             defaultValue={this.props.extras}
-            onChange={handleInputChange} />
-          <button type='button' onClick={handleMealClose}>Close</button>
+            onChange={this.handleExtrasChange} />
+          <button type='button' onClick={this.props.closeMeal}>Close</button>
           <label className={classes['auto-close']}>
             <input type='checkbox'
               defaultChecked={this.props.auto_close}

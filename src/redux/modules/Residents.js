@@ -48,7 +48,10 @@ export type ResidentsSchema = Array<ResidentSchema>;
 const initialState: ResidentsSchema = [
   {id: 1, name: 'Bob', unit: 'A'},
   {id: 2, name: 'Julia', unit: 'B'},
-  {id: 3, name: 'Simon', unit: 'C'}
+  {id: 3, name: 'Simon', unit: 'C'},
+  {id: 4, name: 'Paul', unit: 'D'},
+  {id: 5, name: 'Steph', unit: 'E'},
+  {id: 6, name: 'Mo', unit: 'F'}
 ]
 
 // ------------------------------------
