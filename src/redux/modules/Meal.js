@@ -1,6 +1,7 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
+export const FETCH_MEAL = 'FETCH_MEAL'
 export const UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION'
 export const UPDATE_EXTRAS = 'UPDATE_EXTRAS'
 export const CLOSE_MEAL = 'CLOSE_MEAL'
@@ -8,6 +9,11 @@ export const CLOSE_MEAL = 'CLOSE_MEAL'
 // ------------------------------------
 // Actions
 // ------------------------------------
+export const fetchMeal = (payload: string): Action => ({
+  type: FETCH_MEAL,
+  payload: payload
+})
+
 export const updateDescription = (payload: string): Action => ({
   type: UPDATE_DESCRIPTION,
   payload: payload
@@ -39,6 +45,7 @@ export const requestMeal = (): Function => {
 }
 
 export const actions = {
+  fetchMeal,
   updateDescription,
   updateExtras,
   closeMeal,
@@ -53,51 +60,37 @@ export type MealSchema = {
   description: string,
   date: string,
   epoch: number,
-  seconds_before_start: number,
-  omnivore: number,
-  vegetarian: number,
-  late: number,
-  extras: number,
+  current_time: number,
+  max: number,
   auto_close: boolean,
-  status: {
-    open: boolean,
-    closed: boolean,
-    closable: boolean,
-    reconciled: boolean,
-    hasNext: boolean,
-    hasPrev: boolean
-  }
+  closed: boolean,
+  reconciled: boolean,
+  hasNext: boolean,
+  hasPrev: boolean
 };
 
 const initialState: MealSchema = {
   id: 42,
   description: 'lots of food, lol...',
   date: 'Thurs. Nov 4 2016',
-  epoch: 1234567890,
-  seconds_before_start: 48 * 60 * 60, // value chosen so `Close` button and `Auto-close` checkbox will be hidden
-  omnivore: 12,
-  vegetarian: 3,
-  late: 2,
-  extras: 5,
+  epoch: 1459753326698,
+  current_time: Date.now(),
+  max: 20,
   auto_close: true,
-  status: {
-    open: true,
-    closed: false,
-    closable: true,
-    reconciled: false,
-    hasNext: true,
-    hasPrev: false
-  }
+  closed: false,
+  reconciled: false,
+  hasNext: true,
+  hasPrev: false,
+  isFetching: false
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  /* eslint-disable max-len */
-  [UPDATE_DESCRIPTION]: (state: MealSchema, action): MealSchema => Object.assign({}, state, {description: action.payload}),
-  [UPDATE_EXTRAS]: (state: MealSchema, action): MealSchema => Object.assign({}, state, {extras: Number(action.payload)}),
-  [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => Object.assign({}, state, Object.assign({}, state.status, {closed: true}))
+  [UPDATE_DESCRIPTION]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
+  [UPDATE_EXTRAS]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
+  [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload})
 }
 
 // ------------------------------------

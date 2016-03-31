@@ -6,14 +6,20 @@ import classes from './Cooks.scss'
 import Cook from '../Cook/Cook'
 
 // Schema
-import type { BillsSchema } from '../../redux/modules/Bills'
+import type { BillSchema } from '../../redux/modules/bill'
 import type { ResidentsSchema } from '../../redux/modules/Residents'
 
 type Props = {
-  bills: BillsSchema,
+  bill1: BillSchema,
+  bill2: BillSchema,
+  bill3: BillSchema,
   residents: ResidentsSchema,
-  updateBill: Function,
-  updateCost: Function
+  updateCook1: Function,
+  updateCook2: Function,
+  updateCook3: Function,
+  updateCost1: Function,
+  updateCost2: Function,
+  updateCost3: Function
 };
 
 export class Cooks extends React.Component<void, Props, void> {
@@ -22,15 +28,15 @@ export class Cooks extends React.Component<void, Props, void> {
       <section className={classes.cooks}>
         <div className={classes['cooks-container']}>
           <h3 className={classes['cooks-title']}>Cooks</h3>
-          <Cook bill={this.props.bills['1']} residents={this.props.residents}
-            num={1} updateBill={this.props.updateBill}
-            updateCost={this.props.updateCost} />
-          <Cook bill={this.props.bills['2']} residents={this.props.residents}
-            num={2} updateBill={this.props.updateBill}
-            updateCost={this.props.updateCost} />
-          <Cook bill={this.props.bills['3']} residents={this.props.residents}
-            num={3} updateBill={this.props.updateBill}
-            updateCost={this.props.updateCost} />
+          <Cook bill={this.props.bill1} residents={this.props.residents}
+            num={1} updateCook={this.props.updateCook1}
+            updateCost={this.props.updateCost1} />
+          <Cook bill={this.props.bill2} residents={this.props.residents}
+            num={2} updateCook={this.props.updateCook2}
+            updateCost={this.props.updateCost2} />
+          <Cook bill={this.props.bill3} residents={this.props.residents}
+            num={3} updateCook={this.props.updateCook3}
+            updateCost={this.props.updateCost3} />
         </div>
       </section>
     )

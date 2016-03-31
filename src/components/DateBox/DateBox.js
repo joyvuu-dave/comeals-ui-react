@@ -10,7 +10,9 @@ import Status from '../Status/Status'
 type Props = {
   meal_id: number,
   date: string,
-  status: object
+  hasPrev: boolean,
+  hasNext: boolean,
+  status: string
 };
 
 export class DateBox extends React.Component<void, Props, void> {
@@ -19,12 +21,10 @@ export class DateBox extends React.Component<void, Props, void> {
       <section className={classes['date-box']}>
         <div className={classes['date_box_container']}>
           <MealDate date={this.props.date} />
-          <PrevNext hasPrev={this.props.status.hasPrev}
-            hasNext={this.props.status.hasNext}
+          <PrevNext hasPrev={this.props.hasPrev}
+            hasNext={this.props.hasNext}
             meal_id={this.props.meal_id} />
-          <Status reconciled={this.props.status.reconciled}
-            closed={this.props.status.closed}
-            open={this.props.status.open} />
+          <Status status={this.props.status} />
         </div>
       </section>
     )

@@ -7,10 +7,11 @@ function handleAutoCloseChange () {
 }
 
 type Props = {
-  extras: number,
   auto_close: boolean,
   updateExtras: Function,
-  closeMeal: Function
+  closeMeal: Function,
+  disabled: boolean,
+  value: string
 };
 
 export class Extra extends React.Component<void, Props, void> {
@@ -20,7 +21,7 @@ export class Extra extends React.Component<void, Props, void> {
   }
 
   handleExtrasChange (e) {
-    this.props.updateExtras(e.target.value)
+    this.props.updateExtras(e.target.value.toString())
   }
 
   render () {
@@ -29,8 +30,9 @@ export class Extra extends React.Component<void, Props, void> {
         <div className={classes['extra-container']}>
           <h3 className={classes['extra-title']}>Extras</h3>
           <input className={classes['extra-input']}
-            defaultValue={this.props.extras}
-            onChange={this.handleExtrasChange} />
+            value={this.props.value}
+            onChange={this.handleExtrasChange}
+            disabled={this.props.disabled} />
           <button type='button' onClick={this.props.closeMeal}>Close</button>
           <label className={classes['auto-close']}>
             <input type='checkbox'

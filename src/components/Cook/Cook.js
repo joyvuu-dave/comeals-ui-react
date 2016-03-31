@@ -4,13 +4,13 @@ import classes from './Cook.scss'
 
 // Schema
 import type { ResidentsSchema } from '../../redux/modules/Residents'
-import type { BillSchema } from '../../redux/modules/Bills'
+import type { BillSchema } from '../../redux/modules/bill'
 
 type Props = {
   num: number,
   residents: ResidentsSchema,
   bill: BillSchema,
-  updateBill: Function,
+  updateCook: Function,
   updateCost: Function
 };
 
@@ -22,17 +22,11 @@ export class Cook extends React.Component<void, Props, void> {
   }
 
   handleSelectChange (e) {
-    this.props.updateBill({
-      num: this.props.num,
-      resident_id: e.target.value
-    })
+    this.props.updateCook({resident_id: Number(e.target.value)})
   }
 
   handleInputChange (e) {
-    this.props.updateCost({
-      num: this.props.num,
-      amount: e.target.value
-    })
+    this.props.updateCost({amount: Number(e.target.value)})
   }
 
   renderOptions () {
@@ -49,7 +43,7 @@ export class Cook extends React.Component<void, Props, void> {
     return (
       <section>
         <select className={classes['cook-select']}
-          defaultValue={this.props.bill ? this.props.bill.resident_id : ''}
+          value={this.props.bill ? this.props.bill.resident_id : -1}
           onChange={this.handleSelectChange}>
           <option value=''>Cook {this.props.num}</option>
           {this.renderOptions()}
@@ -61,7 +55,7 @@ export class Cook extends React.Component<void, Props, void> {
           max='500'
           step='0.01'
           placeholder='food cost'
-          defaultValue={this.props.bill ? this.props.bill.amount : ''}
+          value={this.props.bill ? this.props.bill.amount : 0}
           onChange={this.handleInputChange} />
       </section>
     )
