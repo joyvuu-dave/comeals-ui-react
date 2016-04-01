@@ -4,6 +4,7 @@
 export const FETCH_MEAL = 'FETCH_MEAL'
 export const UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION'
 export const UPDATE_EXTRAS = 'UPDATE_EXTRAS'
+export const UPDATE_AUTO_CLOSE = 'UPDATE_AUTO_CLOSE'
 export const CLOSE_MEAL = 'CLOSE_MEAL'
 
 // ------------------------------------
@@ -21,6 +22,11 @@ export const updateDescription = (payload: string): Action => ({
 
 export const updateExtras = (payload: string): Action => ({
   type: UPDATE_EXTRAS,
+  payload: payload
+})
+
+export const updateAutoClose = (payload: string): Action => ({
+  type: UPDATE_AUTO_CLOSE,
   payload: payload
 })
 
@@ -44,12 +50,11 @@ export const requestMeal = (): Function => {
   }
 }
 
-export const actions = {
-  fetchMeal,
+export const mealActions = {
   updateDescription,
   updateExtras,
-  closeMeal,
-  requestMeal
+  updateAutoClose,
+  closeMeal
 }
 
 // ------------------------------------
@@ -71,13 +76,13 @@ export type MealSchema = {
 
 const initialState: MealSchema = {
   id: 42,
-  description: 'lots of food, lol...',
-  date: 'Thurs. Nov 4 2016',
-  epoch: 1459753326698,
-  current_time: Date.now(),
-  max: 20,
-  auto_close: true,
-  closed: false,
+  description: 'Soylent for everyone!',
+  date: new Date(2016, 3, 1).toDateString(),
+  epoch: Date.parse(new Date(2016, 3, 1)),
+  current_time: Date.parse(new Date(2016, 2, 31)),
+  max: null,
+  auto_close: false,
+  closed_in_database: false,
   reconciled: false,
   hasNext: true,
   hasPrev: false,
@@ -90,6 +95,7 @@ const initialState: MealSchema = {
 const ACTION_HANDLERS = {
   [UPDATE_DESCRIPTION]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
   [UPDATE_EXTRAS]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
+  [UPDATE_AUTO_CLOSE]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
   [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload})
 }
 

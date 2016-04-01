@@ -5,7 +5,7 @@ import classes from './HomeView.scss'
 import { createSelector } from 'reselect'
 
 // Actions
-import { updateDescription, updateExtras, closeMeal } from '../../redux/modules/Meal'
+import { updateDescription, updateExtras, updateAutoClose, closeMeal } from '../../redux/modules/Meal'
 import { updateCook1, updateCost1 } from '../../redux/modules/Bill1'
 import { updateCook2, updateCost2 } from '../../redux/modules/Bill2'
 import { updateCook3, updateCost3 } from '../../redux/modules/Bill3'
@@ -53,28 +53,34 @@ export class HomeView extends React.Component<void, Props, void> {
             <Menu
               disabled={this.props.ui.menu_textarea_disabled}
               description={this.props.meal.description}
-              handleDescriptionUpdate={this.props.actions.updateDescription} />
+              updateDescription={this.props.actions.meal.updateDescription} />
           </section>
           <section className={classes['cooks-and-signups']}>
             <Cooks
               residents={this.props.residents}
-              bill1={this.props.bills['1']}
-              bill2={this.props.bills['2']}
-              bill3={this.props.bills['3']}
-              updateCook1={this.props.actions.updateCook1} updateCost1={this.props.actions.updateCost1}
-              updateCook2={this.props.actions.updateCook2} updateCost2={this.props.actions.updateCost2}
-              updateCook3={this.props.actions.updateCook3} updateCost3={this.props.actions.updateCost3} />
+              bills={this.props.bills}
+              actions={this.props.actions.bills} />
             <Signups
               attendees={this.props.meal.attendees}
               omnivores={this.props.meal.omnivores}
               vegetarians={this.props.meal.vegetarians}
               late={this.props.meal.late} />
             <Extra
+              /* Auto-Close Checkbox */
               auto_close={this.props.meal.auto_close}
-              updateExtras={this.props.actions.updateExtras}
-              closeMeal={this.props.actions.closeMeal}
+              auto_close_checkbox_hidden={this.props.ui.auto_close_checkbox_hidden}
+              auto_close_checkbox_disabled={this.props.ui.auto_close_checkbox_disabled}
+              updateAutoClose={this.props.actions.meal.updateAutoClose}
+
+              /* Extras Input Field */
               value={this.props.meal.extras}
-              disabled={this.props.ui.extras_input_disabled} />
+              extras_input_disabled={this.props.ui.extras_input_disabled}
+              updateExtras={this.props.actions.meal.updateExtras}
+
+              /* Close Button */
+              close_button_hidden={this.props.ui.close_button_hidden}
+              close_button_disabled={this.props.ui.close_button_disabled}
+              closeMeal={this.props.actions.closeMeal} />
           </section>
         </section>
         <section className={classes.middle}>
@@ -178,7 +184,7 @@ const getMax = (state) => state.meal.max
 export const getExtras = createSelector(
   [ getMax, getAttendees ],
   (max, attendees) => {
-    return max ? max - attendees : 0
+    return max ? max - attendees : 'n/a'
   }
 )
 
@@ -207,22 +213,15 @@ export const get_cost_input_disabled = createSelector(
   }
 )
 
-export const get_extras_input_hidden = createSelector(
-  [ getOpen ],
-  (open) => {
-    return open
-  }
-)
-
 export const get_extras_input_disabled = createSelector(
-  [ getReconciled, getIsFetching ],
-  (reconciled, isFetching) => {
-    return reconciled || isFetching
+  [ getOpen, getReconciled, getIsFetching ],
+  (open, reconciled, isFetching) => {
+    return open || reconciled || isFetching
   }
 )
 
 export const get_close_button_disabled = createSelector(
-  [ getReconciled, getIsFetching ],
+  [ getIsFetching ],
   (isFetching) => {
     return isFetching
   }
@@ -231,7 +230,8 @@ export const get_close_button_disabled = createSelector(
 export const get_close_button_hidden = createSelector(
   [ getEpoch, getCurrentTime, getClosed, getReconciled ],
   (epoch, current_time, closed, reconciled) => {
-    return closed || reconciled || current_time >= epoch
+    return closed || reconciled || current_time >= epoch ||
+           current_time + fourty_eight_hours < epoch
   }
 )
 
@@ -337,15 +337,26 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
       meal_residents: stateProps.meal_residents,
       guests: stateProps.guests,
       actions: {
-        updateDescription: dispatchProps.updateDescription,
-        updateExtras: dispatchProps.updateExtras,
-        closeMeal: dispatchProps.closeMeal,
-        updateCook1: dispatchProps.updateCook1,
-        updateCook2: dispatchProps.updateCook2,
-        updateCook3: dispatchProps.updateCook3,
-        updateCost1: dispatchProps.updateCost1,
-        updateCost2: dispatchProps.updateCost2,
-        updateCost3: dispatchProps.updateCost3
+        meal: {
+          updateDescription: dispatchProps.updateDescription,
+          updateExtras: dispatchProps.updateExtras,
+          updateAutoClose: dispatchProps.updateAutoClose,
+          closeMeal: dispatchProps.closeMeal
+        },
+        bills: {
+          '1': {
+            updateCook: dispatchProps.updateCook1,
+            updateCost: dispatchProps.updateCost1
+          },
+          '2': {
+            updateCook: dispatchProps.updateCook2,
+            updateCost: dispatchProps.updateCost2
+          },
+          '3': {
+            updateCook: dispatchProps.updateCook3,
+            updateCost: dispatchProps.updateCost3
+          }
+        }
       },
       ui: {
         // Menu
@@ -355,13 +366,19 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         cook_select_disabled: get_cook_select_disabled(stateProps),
         cost_input_disabled: get_cost_input_disabled(stateProps),
 
-        // Extras
-        extras_input_disabled: get_extras_input_disabled(stateProps),
-        extras_input_hidden: get_extras_input_hidden(stateProps),
-        close_button_disabled: get_close_button_disabled(stateProps),
-        close_button_hidden: get_close_button_hidden(stateProps),
-        auto_close_checkbox_disabled: get_auto_close_checkbox_disabled(stateProps),
+        /*
+        Extras
+        */
+        // Auto-Close Checkbox
         auto_close_checkbox_hidden: get_auto_close_checkbox_hidden(stateProps),
+        auto_close_checkbox_disabled: get_auto_close_checkbox_disabled(stateProps),
+
+        // Extras Input Field
+        extras_input_disabled: get_extras_input_disabled(stateProps),
+
+        // Close Button
+        close_button_hidden: get_close_button_hidden(stateProps),
+        close_button_disabled: get_close_button_disabled(stateProps),
 
         // Attendees
         checked_attendance_checkbox_disabled: get_checked_attendance_checkbox_disabled(stateProps),
@@ -383,12 +400,13 @@ export default connect(
   {
     updateDescription,
     updateExtras,
+    updateAutoClose,
     closeMeal,
     updateCook1,
-    updateCook2,
-    updateCook3,
     updateCost1,
+    updateCook2,
     updateCost2,
+    updateCook3,
     updateCost3
   },
   mergeProps

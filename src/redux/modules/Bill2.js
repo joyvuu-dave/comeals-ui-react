@@ -41,7 +41,7 @@ export const requestBill2 = (): Function => {
   }
 }
 
-export const actions = {
+export const Bill2Actions = {
   updateCook2,
   updateCost2,
   requestBill2

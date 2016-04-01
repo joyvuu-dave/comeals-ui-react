@@ -9,17 +9,31 @@ import Cook from '../Cook/Cook'
 import type { BillSchema } from '../../redux/modules/bill'
 import type { ResidentsSchema } from '../../redux/modules/Residents'
 
+type BillsSchema = {
+  '1': BillSchema,
+  '2': BillSchema,
+  '3': BillSchema
+};
+
+type BillActionsSchema = {
+  '1': {
+    updateCook: Function,
+    updateCost: Function
+  },
+  '2': {
+    updateCook: Function,
+    updateCost: Function
+  },
+  '3': {
+    updateCook: Function,
+    updateCost: Function
+  }
+};
+
 type Props = {
-  bill1: BillSchema,
-  bill2: BillSchema,
-  bill3: BillSchema,
+  bills: BillsSchema,
   residents: ResidentsSchema,
-  updateCook1: Function,
-  updateCook2: Function,
-  updateCook3: Function,
-  updateCost1: Function,
-  updateCost2: Function,
-  updateCost3: Function
+  actions: BillActionsSchema
 };
 
 export class Cooks extends React.Component<void, Props, void> {
@@ -28,15 +42,24 @@ export class Cooks extends React.Component<void, Props, void> {
       <section className={classes.cooks}>
         <div className={classes['cooks-container']}>
           <h3 className={classes['cooks-title']}>Cooks</h3>
-          <Cook bill={this.props.bill1} residents={this.props.residents}
-            num={1} updateCook={this.props.updateCook1}
-            updateCost={this.props.updateCost1} />
-          <Cook bill={this.props.bill2} residents={this.props.residents}
-            num={2} updateCook={this.props.updateCook2}
-            updateCost={this.props.updateCost2} />
-          <Cook bill={this.props.bill3} residents={this.props.residents}
-            num={3} updateCook={this.props.updateCook3}
-            updateCost={this.props.updateCost3} />
+          <Cook
+            bill={this.props.bills['1']}
+            residents={this.props.residents}
+            num={1}
+            updateCook={this.props.actions['1'].updateCook}
+            updateCost={this.props.actions['1'].updateCost} />
+          <Cook
+            bill={this.props.bills['2']}
+            residents={this.props.residents}
+            num={2}
+            updateCook={this.props.actions['2'].updateCook}
+            updateCost={this.props.actions['2'].updateCost} />
+          <Cook
+            bill={this.props.bills['3']}
+            residents={this.props.residents}
+            num={3}
+            updateCook={this.props.actions['3'].updateCook}
+            updateCost={this.props.actions['3'].updateCost} />
         </div>
       </section>
     )

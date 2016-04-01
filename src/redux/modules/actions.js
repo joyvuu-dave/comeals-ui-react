@@ -1,11 +1,22 @@
 export type ActionsSchema = {
-  updateDescription: Function,
-  updateExtras: Function,
-  closeMeal: Function,
-  updateCook1: Function,
-  updateCook2: Function,
-  updateCook3: Function,
-  updateCost1: Function,
-  updateCost2: Function,
-  updateCost3: Function
+  meal: {
+    updateDescription: Function,
+    updateExtras: Function,
+    updateAutoClose: Function,
+    closeMeal: Function
+  },
+  bills: {
+    '1': {
+      updateCook: Function,
+      updateCost: Function
+    },
+    '2': {
+      updateCook: Function,
+      updateCost: Function
+    },
+    '3': {
+      updateCook: Function,
+      updateCost: Function
+    }
+  }
 };

@@ -7,9 +7,9 @@ import type { ResidentsSchema } from '../../redux/modules/Residents'
 import type { BillSchema } from '../../redux/modules/bill'
 
 type Props = {
-  num: number,
-  residents: ResidentsSchema,
   bill: BillSchema,
+  residents: ResidentsSchema,
+  num: number,
   updateCook: Function,
   updateCost: Function
 };
@@ -35,17 +35,14 @@ export class Cook extends React.Component<void, Props, void> {
     )
   }
 
-  renderSelectValue () {
-    this.props.bill ? this.props.bill.resident_id : ''
-  }
-
   render () {
     return (
       <section>
-        <select className={classes['cook-select']}
+        <select
+          className={classes['cook-select']}
           value={this.props.bill ? this.props.bill.resident_id : -1}
           onChange={this.handleSelectChange}>
-          <option value=''>Cook {this.props.num}</option>
+          <option value={-1}>{`Cook ${this.props.num}`}</option>
           {this.renderOptions()}
         </select>
 

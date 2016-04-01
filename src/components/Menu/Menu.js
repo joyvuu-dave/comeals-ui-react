@@ -5,7 +5,7 @@ import classes from './Menu.scss'
 type Props = {
   disabled: boolean,
   description: string,
-  handleDescriptionUpdate: Function
+  updateDescription: Function
 };
 
 export class Menu extends React.Component<void, Props, void> {
@@ -15,7 +15,7 @@ export class Menu extends React.Component<void, Props, void> {
   }
 
   handleChange (e) {
-    this.props.handleDescriptionUpdate(e.target.value.trim())
+    this.props.updateDescription({description: e.target.value})
   }
 
   render () {
