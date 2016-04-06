@@ -2,15 +2,30 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const ACTIONTYPE = 'ACTIONTYPE'
+export const ADD_MEAL_RESIDENT = 'ADD_MEAL_RESIDENT'
+export const REMOVE_MEAL_RESIDENT = 'REMOVE_MEAL_RESIDENT'
+export const TOGGLE_MEAL_RESIDENT_VEG = 'TOGGLE_MEAL_RESIDENT_VEG'
+export const TOGGLE_LATE = 'TOGGLE_LATE'
 // ------------------------------------
 // Actions
 // ------------------------------------
-// NOTE: "Action" is a Flow interface defined in https://github.com/TechnologyAdvice/flow-interfaces
-// If you're unfamiliar with Flow, you are completely welcome to avoid annotating your code, but
-// if you'd like to learn more you can check out: flowtype.org.
-export const mealResidentsAction = (payload: Object): Action => ({
-  type: ACTIONTYPE,
+export const addMealResident = (payload: number): Action => ({
+  type: ADD_MEAL_RESIDENT,
+  payload: payload
+})
+
+export const removeMealResident = (payload: number): Action => ({
+  type: REMOVE_MEAL_RESIDENT,
+  payload: payload
+})
+
+export const toggleMealResidentVeg = (payload: id): Action => ({
+  type: TOGGLE_MEAL_RESIDENT_VEG,
+  payload: payload
+})
+
+export const toggleLate = (payload: id): Action => ({
+  type: TOGGLE_LATE,
   payload: payload
 })
 
@@ -31,30 +46,49 @@ export const requestMealResidents = (): Function => {
 }
 
 export const actions = {
-  mealResidentsAction,
-  requestMealResidents
+  addMealResident,
+  removeMealResident,
+  toggleMealResidentVeg,
+  toggleLate
 }
 
 // ------------------------------------
 // Model
 // ------------------------------------
 export type MealResidentSchema = {
-  id: number,
   resident_id: number,
   vegetarian: boolean,
   late: boolean
 };
+
 export type MealResidentsSchema = Array<MealResidentSchema>;
 
 const initialState: MealResidentsSchema = [
-  {id: 1, resident_id: 2, vegetarian: true, late: true}
+  {resident_id: 1, vegetarian: true, late: true},
+  {resident_id: 2, vegetarian: false, late: false},
+  {resident_id: 3, vegetarian: true, late: true},
+  {resident_id: 4, vegetarian: false, late: false}
 ]
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ACTIONTYPE]: (state: MealResidentsSchema, action): MealResidentsSchema => initialState
+  [ADD_MEAL_RESIDENT]: (state: MealResidentsSchema, action): MealResidentsSchema => {
+    return [
+      ...state,
+      {resident_id: action.resident_id, vegetarian: action.vegetarian, late: false}
+    ]
+  },
+  [REMOVE_MEAL_RESIDENT]: (state: MealResidentsSchema, action): MealResidentsSchema => {
+    return state.map((meal_resident) => {
+      if (meal_resident.id !== action.resident_id) {
+        return meal_resident
+      }
+    })
+  },
+  [TOGGLE_MEAL_RESIDENT_VEG]: (state: MealResidentsSchema, action): MealResidentsSchema => initialState,
+  [TOGGLE_LATE]: (state: MealResidentsSchema, action): MealResidentsSchema => initialState
 }
 
 // ------------------------------------

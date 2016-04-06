@@ -9,6 +9,7 @@ import GuestsTable from '../GuestsTable/GuestsTable'
 import type { GuestsSchema } from '../../redux/modules/Guests'
 
 type Props = {
+  ui: Object,
   guests: GuestsSchema
 };
 export class Guests extends React.Component<void, Props, void> {
@@ -16,7 +17,9 @@ export class Guests extends React.Component<void, Props, void> {
     return (
       <section className={classes.guests}>
         <h3 className={classes['guest-title']}>Guests</h3>
-        <GuestsTable guests={this.props.guests} />
+        <GuestsTable
+          ui={this.props.ui}
+          guests={this.props.guests} />
       </section>
     )
   }

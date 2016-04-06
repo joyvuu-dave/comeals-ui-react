@@ -46,12 +46,14 @@ export type ResidentSchema = {
 export type ResidentsSchema = Array<ResidentSchema>;
 
 const initialState: ResidentsSchema = [
-  {id: 1, name: 'Bob', unit: 'A'},
-  {id: 2, name: 'Julia', unit: 'B'},
-  {id: 3, name: 'Simon', unit: 'C'},
-  {id: 4, name: 'Paul', unit: 'D'},
-  {id: 5, name: 'Steph', unit: 'E'},
-  {id: 6, name: 'Mo', unit: 'F'}
+  {id: 1, name: 'Bob', unit: 'A', vegetarian: true},
+  {id: 2, name: 'Julia', unit: 'B', vegetarian: true},
+  {id: 3, name: 'Simon', unit: 'C', vegetarian: false},
+  {id: 4, name: 'Paul', unit: 'D', vegetarian: false},
+  {id: 5, name: 'Steph', unit: 'E', vegetarian: true},
+  {id: 6, name: 'Mo', unit: 'F', vegetarian: true},
+  {id: 7, name: 'Clay', unit: 'G', vegetarian: false},
+  {id: 8, name: 'Andre', unit: 'H', vegetarian: false}
 ]
 
 // ------------------------------------

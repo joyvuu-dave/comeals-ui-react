@@ -11,6 +11,8 @@ import type { ResidentsSchema } from '../../redux/modules/Residents'
 import type { MealResidentsSchema } from '../../redux/modules/MealResidents'
 
 type Props = {
+  ui: Object,
+  actions: Object,
   residents: ResidentsSchema,
   meal_residents: MealResidentsSchema
 };
@@ -20,7 +22,11 @@ export class Attendees extends React.Component<void, Props, void> {
     return (
       <section className={classes.attendees}>
         <h3 className={classes['attendees-title']}>Attendees</h3>
-        <AttendeesTable residents={this.props.residents} meal_residents={this.props.meal_residents} />
+        <AttendeesTable
+          ui={this.props.ui}
+          actions={this.props.actions}
+          residents={this.props.residents}
+          meal_residents={this.props.meal_residents} />
       </section>
     )
   }

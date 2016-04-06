@@ -10,9 +10,10 @@ type Props = {
   updateAutoClose: Function,
 
   // Extras Input Field
-  value: string,
-  extras_input_disabled: boolean,
+  input_value: string,
+  input_disabled: boolean,
   updateExtras: Function,
+  attendees: number,
 
   // Close Button
   close_button_hidden: boolean,
@@ -29,7 +30,7 @@ export class Extra extends React.Component<void, Props, void> {
   }
 
   handleExtrasChange (e) {
-    this.props.updateExtras(e.target.value.toString())
+    this.props.updateExtras({max: Number(e.target.value) + this.props.attendees})
   }
 
   handleAutoCloseChange (e) {
@@ -37,7 +38,7 @@ export class Extra extends React.Component<void, Props, void> {
   }
 
   handleCloseClick (e) {
-    this.props.closeMeal({closed_in_database: true})
+    this.props.closeMeal()
   }
 
   render () {
@@ -48,8 +49,8 @@ export class Extra extends React.Component<void, Props, void> {
           {/* Extras Input Field */}
           <h3 className={classes['extra-title']}>Extras</h3>
           <input className={classes['extra-input']}
-            value={this.props.value}
-            disabled={this.props.extras_input_disabled}
+            value={this.props.input_value}
+            disabled={this.props.input_disabled}
             onChange={this.handleExtrasChange} />
 
           {/* Close Button */}

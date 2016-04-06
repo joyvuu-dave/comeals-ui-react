@@ -77,16 +77,15 @@ export type MealSchema = {
 const initialState: MealSchema = {
   id: 42,
   description: 'Soylent for everyone!',
-  date: new Date(2016, 3, 1).toDateString(),
-  epoch: Date.parse(new Date(2016, 3, 1)),
-  current_time: Date.parse(new Date(2016, 2, 31)),
+  date: new Date(2016, 3, 7).toDateString(),
+  epoch: Date.parse(new Date(2016, 3, 7)),
+  current_time: Date.parse(new Date(2016, 3, 6)),
   max: null,
   auto_close: false,
   closed_in_database: false,
   reconciled: false,
   hasNext: true,
-  hasPrev: false,
-  isFetching: false
+  hasPrev: false
 }
 
 // ------------------------------------
@@ -96,7 +95,7 @@ const ACTION_HANDLERS = {
   [UPDATE_DESCRIPTION]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
   [UPDATE_EXTRAS]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
   [UPDATE_AUTO_CLOSE]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
-  [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload})
+  [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => Object.assign({}, state, {closed_in_database: true})
 }
 
 // ------------------------------------

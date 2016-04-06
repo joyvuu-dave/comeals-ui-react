@@ -3,10 +3,6 @@
 import React from 'react'
 import classes from './AttendeesTable.scss'
 
-function handleAttendanceChange () {
-  console.log('change of attendance...')
-}
-
 function handleLateChange () {
   console.log('change of late status...')
 }
@@ -24,39 +20,87 @@ import type { ResidentsSchema } from '../../redux/modules/Residents'
 import type { MealResidentsSchema } from '../../redux/modules/MealResidents'
 
 type Props = {
+  ui: {
+    checked_checkbox_disabled: boolean,
+    unchecked_checkbox_disabled: boolean,
+    veg_checkbox_disabled: boolean,
+    late_checkbox_disabled: boolean,
+    add_guest_button_disabled: boolean
+  },
+  actions: {
+    addMealResident: Function,
+    removeMealResident: Function,
+    toggleVeg: Function,
+    toggleLate: Function
+  },
   residents: ResidentsSchema,
   meal_residents: MealResidentsSchema
 };
 
 export class AttendeesTable extends React.Component<void, Props, void> {
+  constructor () {
+    super()
+    this.handleAttendanceClick = this.handleAttendanceClick.bind(this)
+  }
+
+  handleAttendanceClick (e) {
+    const meal_resident_ids = this.props.meal_residents.map((meal_resident) => meal_resident.id)
+    const id = Number(e.target.value)
+
+    if (meal_resident_ids.includes(id)) {
+      this.props.actions.removeMealResident({resident_id: id})
+    } else {
+      const is_vegetarian = this.props.residents.find((resident) => resident.id === id).vegetarian
+
+      this.props.actions.addMealResident({
+        resident_id: id,
+        vegetarian: is_vegetarian
+      })
+    }
+  }
+
   renderResidents (): Array<React$Element> {
     return this.props.residents.map((r) => {
       let attendee = this.props.meal_residents.find((mr) => mr.resident_id === r.id)
+      let is_vegetarian = attendee ? attendee.vegetarian : r.vegetarian
 
       return (
         <tr key={r.id}>
           <td>{r.unit}</td>
-          <td>
-            <input type='checkbox' defaultChecked={attendee}
-              onChange={handleAttendanceChange} />
+          <td> {/* Attendance Checkbox */}
+            <input
+              value={r.id}
+              disabled={attendee ? this.props.ui.checked_checkbox_disabled : this.props.ui.unchecked_checkbox_disabled}
+              type='checkbox'
+              checked={attendee}
+              onChange={this.handleAttendanceClick} />
           </td>
           <td>{r.name}</td>
-          <td>
+          <td> {/* Late Checkbox */}
             <label>
-              <input type='checkbox'
-                defaultChecked={attendee ? attendee.late : ''}
+              <input
+                value={r.id}
+                disabled={attendee ? this.props.late_checkbox_disabled : true}
+                type='checkbox'
+                checked={attendee ? attendee.late : false}
                 onChange={handleLateChange} />{' '}Late
             </label>
           </td>
-          <td>
+          <td> {/* Veg Checkbox */}
             <label>
-              <input type='checkbox'
-                defaultChecked={attendee ? attendee.vegetarian : ''}
+              <input
+                value={r.id}
+                disabled={this.props.ui.veg_checkbox_disabled}
+                type='checkbox'
+                checked={is_vegetarian}
                 onChange={handleVegChange} />{' '}Veg
             </label>
           </td>
-          <td>
-            <button type='button' onClick={handleGuestAdd}>+ Guest</button>
+          <td> {/* Add Guest Button */}
+            <button
+              disabled={this.props.ui.add_guest_button_disabled}
+              type='button'
+              onClick={handleGuestAdd}>+ Guest</button>
           </td>
         </tr>
       )
