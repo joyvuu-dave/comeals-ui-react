@@ -2,43 +2,71 @@
 import React from 'react'
 import classes from './GuestsTable.scss'
 
-function handleChange () {
-  console.log('guest veg checkbox changed...')
-}
-
-function handleGuestRemove () {
-  console.log('handle guest remove...')
-}
-
 // Schema
 import type { GuestsSchema } from '../../redux/modules/Guests'
+import type { ResidentsSchema } from '../../redux/modules/Residents'
 
 type Props = {
   ui: {
     veg_checkbox_disabled: boolean,
     remove_button_disabled: boolean
   },
-  guests: GuestsSchema
+  actions: {
+    remove: Function,
+    toggleVeg: Function
+  },
+  guests: GuestsSchema,
+  residents: ResidentsSchema
 };
 
 export class GuestsTable extends React.Component<void, Props, void> {
+  constructor () {
+    super()
+    this.handleToggleVeg = this.handleToggleVeg.bind(this)
+    this.handleGuestRemove = this.handleGuestRemove.bind(this)
+  }
+
+  handleToggleVeg (e) {
+    this.props.actions.toggleVeg({id: e.target.value})
+  }
+
+  handleGuestRemove (e) {
+    this.props.actions.remove({id: e.target.value})
+  }
+
+  renderHost (id) {
+    return this.props.residents.find((resident) => {
+      return resident.id === id
+    }).name
+  }
+
+  renderCategory (val) {
+    if (val === 1) {
+      return 'Child'
+    } else {
+      return 'Adult'
+    }
+  }
+
   renderGuests () {
     return this.props.guests.map((g) =>
       <tr key={g.id} className={classes.guest}>
-        <td>{g.host}</td>
-        <td>{g.category}</td>
+        <td>{this.renderHost(g.resident_id)}</td>
+        <td>{this.renderCategory(g.multiplier)}</td>
         <td>
           <input
+            value={g.id}
             disabled={this.props.ui.veg_checkbox_disabled}
             type='checkbox'
             checked={g.vegetarian}
-            onChange={handleChange} />
+            onChange={this.handleToggleVeg} />
         </td>
         <td>
           <button
+            value={g.id}
             disabled={this.props.ui.remove_button_disabled}
             type='button'
-            onClick={handleGuestRemove}>- Guest</button>
+            onClick={this.handleGuestRemove}>- Guest</button>
         </td>
       </tr>
     )

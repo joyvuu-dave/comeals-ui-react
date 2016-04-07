@@ -10,6 +10,7 @@ import bill2 from './modules/Bill2'
 import bill3 from './modules/Bill3'
 import meal_residents from './modules/MealResidents'
 import guests from './modules/Guests'
+import guest_modal from './modules/GuestModal'
 
 export default combineReducers({
   router,
@@ -20,5 +21,6 @@ export default combineReducers({
   bill2,
   bill3,
   meal_residents,
-  guests
+  guests,
+  guest_modal
 })

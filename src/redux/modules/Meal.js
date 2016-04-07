@@ -1,3 +1,4 @@
+/* @flow */
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -77,9 +78,9 @@ export type MealSchema = {
 const initialState: MealSchema = {
   id: 42,
   description: 'Soylent for everyone!',
-  date: new Date(2016, 3, 7).toDateString(),
-  epoch: Date.parse(new Date(2016, 3, 7)),
-  current_time: Date.parse(new Date(2016, 3, 6)),
+  date: new Date(2016, 3, 8).toDateString(),
+  epoch: Date.parse(new Date(2016, 3, 8)),
+  current_time: Date.parse(new Date(2016, 3, 7)),
   max: null,
   auto_close: false,
   closed_in_database: false,

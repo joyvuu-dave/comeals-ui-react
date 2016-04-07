@@ -77,18 +77,29 @@ const ACTION_HANDLERS = {
   [ADD_MEAL_RESIDENT]: (state: MealResidentsSchema, action): MealResidentsSchema => {
     return [
       ...state,
-      {resident_id: action.resident_id, vegetarian: action.vegetarian, late: false}
+      {resident_id: action.payload.resident_id, vegetarian: action.payload.vegetarian, late: false}
     ]
   },
-  [REMOVE_MEAL_RESIDENT]: (state: MealResidentsSchema, action): MealResidentsSchema => {
+  [REMOVE_MEAL_RESIDENT]: (state: MealResidentsSchema, action): MealResidentsSchema =>
+    state.filter((meal_resident) => meal_resident.resident_id !== action.payload.resident_id),
+  [TOGGLE_MEAL_RESIDENT_VEG]: (state: MealResidentsSchema, action): MealResidentsSchema => {
     return state.map((meal_resident) => {
-      if (meal_resident.id !== action.resident_id) {
+      if (meal_resident.resident_id !== action.payload.resident_id) {
         return meal_resident
+      } else {
+        return Object.assign({}, meal_resident, {vegetarian: !meal_resident.vegetarian})
       }
     })
   },
-  [TOGGLE_MEAL_RESIDENT_VEG]: (state: MealResidentsSchema, action): MealResidentsSchema => initialState,
-  [TOGGLE_LATE]: (state: MealResidentsSchema, action): MealResidentsSchema => initialState
+  [TOGGLE_LATE]: (state: MealResidentsSchema, action): MealResidentsSchema => {
+    return state.map((meal_resident) => {
+      if (meal_resident.resident_id !== action.payload.resident_id) {
+        return meal_resident
+      } else {
+        return Object.assign({}, meal_resident, {late: !meal_resident.late})
+      }
+    })
+  }
 }
 
 // ------------------------------------

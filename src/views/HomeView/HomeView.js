@@ -13,6 +13,11 @@ import { addMealResident,
          removeMealResident,
          toggleMealResidentVeg,
          toggleLate } from '../../redux/modules/MealResidents'
+import { openGuestModal,
+         toggleModalVeg,
+         toggleModalMultiplier,
+         closeGuestModal } from '../../redux/modules/GuestModal'
+import { addGuest, removeGuest, toggleGuestVeg } from '../../redux/modules/Guests'
 
 // Components
 import DateBox from '../../components/DateBox/DateBox'
@@ -22,6 +27,7 @@ import Signups from '../../components/Signups/Signups'
 import Extra from '../../components/Extra/Extra'
 import Attendees from '../../components/Attendees/Attendees'
 import Guests from '../../components/Guests/Guests'
+import GuestModal from '../../components/GuestModal/GuestModal'
 
 // Schemas
 import type { MealSchema } from '../../redux/modules/Meal'
@@ -31,6 +37,7 @@ import type { BillsSchema } from '../../redux/modules/bill'
 import type { GuestsSchema } from '../../redux/modules/Guests'
 import type { ActionsSchema } from '../../redux/modules/actions'
 import type { UISchema } from '../../redux/modules/UI'
+import type { GuestModalSchema } from '../../redux/modules/GuestModal'
 
 type Props = {
   data: {
@@ -38,7 +45,8 @@ type Props = {
     bills: BillsSchema,
     residents: ResidentsSchema,
     meal_residents: MealResidentsSchema,
-    guests: GuestsSchema
+    guests: GuestsSchema,
+    guest_modal: GuestModalSchema
   },
   actions: ActionsSchema,
   ui: UISchema
@@ -101,9 +109,14 @@ export class HomeView extends React.Component<void, Props, void> {
             actions={this.props.actions.meal_residents}
             residents={this.props.data.residents}
             meal_residents={this.props.data.meal_residents} />
+          <GuestModal
+            data={this.props.data.guest_modal}
+            actions={this.props.actions.guest_modal} />
           <Guests
             ui={this.props.ui.guests}
-            guests={this.props.data.guests} />
+            actions={this.props.actions.guests}
+            guests={this.props.data.guests}
+            residents={this.props.data.residents} />
         </section>
       </main>
     )
@@ -203,9 +216,8 @@ export const getAttendeesCount = createSelector(
 export const getVegetarians = createSelector(
   [ getMealResidents, getGuests ],
   (meal_residents, guests) => {
-    const meal_resident_vegetarians = meal_residents.filter((meal_resident) => meal_resident.vegetarian).length
-    const guest_vegetarians = guests.filter((guest) => guest.vegetarian).length
-    return meal_resident_vegetarians + guest_vegetarians
+    return meal_residents.filter((meal_resident) => meal_resident.vegetarian).length +
+           guests.filter((guest) => guest.vegetarian).length
   }
 )
 
@@ -373,7 +385,8 @@ const mapStateToProps = (state) => {
     bill1: state.bill1,
     bill2: state.bill2,
     bill3: state.bill3,
-    guests: state.guests
+    guests: state.guests,
+    guest_modal: state.guest_modal
   }
 }
 
@@ -403,7 +416,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         },
         residents: stateProps.residents,
         meal_residents: stateProps.meal_residents,
-        guests: stateProps.guests
+        guests: stateProps.guests,
+        guest_modal: stateProps.guest_modal
       },
       actions: {
         meal: {
@@ -426,14 +440,24 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
             updateCost: dispatchProps.updateCost3
           }
         },
-        residents: {},
         meal_residents: {
           addMealResident: dispatchProps.addMealResident,
           removeMealResident: dispatchProps.removeMealResident,
           toggleVeg: dispatchProps.toggleMealResidentVeg,
-          toggleLate: dispatchProps.toggleLate
+          toggleLate: dispatchProps.toggleLate,
+          openGuestModal: dispatchProps.openGuestModal
         },
-        guests: {}
+        guests: {
+          remove: dispatchProps.removeGuest,
+          toggleVeg: dispatchProps.toggleGuestVeg,
+          toggleMultiplier: dispatchProps.toggleGuestMultiplier
+        },
+        guest_modal: {
+          close: dispatchProps.closeGuestModal,
+          toggleVeg: dispatchProps.toggleModalVeg,
+          toggleMultiplier: dispatchProps.toggleModalMultiplier,
+          addGuest: dispatchProps.addGuest
+        }
       },
       ui: {
         menu: {
@@ -487,7 +511,14 @@ export default connect(
     addMealResident,
     removeMealResident,
     toggleMealResidentVeg,
-    toggleLate
+    toggleLate,
+    openGuestModal,
+    toggleModalVeg,
+    toggleModalMultiplier,
+    closeGuestModal,
+    addGuest,
+    removeGuest,
+    toggleGuestVeg
   },
   mergeProps
 )(HomeView)

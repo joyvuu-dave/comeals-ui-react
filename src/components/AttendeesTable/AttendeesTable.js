@@ -3,18 +3,6 @@
 import React from 'react'
 import classes from './AttendeesTable.scss'
 
-function handleLateChange () {
-  console.log('change of late status...')
-}
-
-function handleVegChange () {
-  console.log('change of veg status...')
-}
-
-function handleGuestAdd () {
-  console.log('add a guest...')
-}
-
 // Schema
 import type { ResidentsSchema } from '../../redux/modules/Residents'
 import type { MealResidentsSchema } from '../../redux/modules/MealResidents'
@@ -31,7 +19,8 @@ type Props = {
     addMealResident: Function,
     removeMealResident: Function,
     toggleVeg: Function,
-    toggleLate: Function
+    toggleLate: Function,
+    openGuestModal: Function
   },
   residents: ResidentsSchema,
   meal_residents: MealResidentsSchema
@@ -41,10 +30,13 @@ export class AttendeesTable extends React.Component<void, Props, void> {
   constructor () {
     super()
     this.handleAttendanceClick = this.handleAttendanceClick.bind(this)
+    this.handleLateChange = this.handleLateChange.bind(this)
+    this.handleVegChange = this.handleVegChange.bind(this)
+    this.handleOpenGuestModal = this.handleOpenGuestModal.bind(this)
   }
 
   handleAttendanceClick (e) {
-    const meal_resident_ids = this.props.meal_residents.map((meal_resident) => meal_resident.id)
+    const meal_resident_ids = this.props.meal_residents.map((meal_resident) => meal_resident.resident_id)
     const id = Number(e.target.value)
 
     if (meal_resident_ids.includes(id)) {
@@ -57,6 +49,26 @@ export class AttendeesTable extends React.Component<void, Props, void> {
         vegetarian: is_vegetarian
       })
     }
+  }
+
+  handleLateChange (e) {
+    const id = Number(e.target.value)
+    this.props.actions.toggleLate({resident_id: id})
+  }
+
+  handleVegChange (e) {
+    const id = Number(e.target.value)
+    this.props.actions.toggleVeg({resident_id: id})
+  }
+
+  handleOpenGuestModal (e) {
+    let id = Number(e.target.value)
+
+    this.props.actions.openGuestModal({
+      open: true,
+      host: this.props.residents.find((resident) => resident.id === id).name,
+      resident_id: id
+    })
   }
 
   renderResidents (): Array<React$Element> {
@@ -83,7 +95,7 @@ export class AttendeesTable extends React.Component<void, Props, void> {
                 disabled={attendee ? this.props.late_checkbox_disabled : true}
                 type='checkbox'
                 checked={attendee ? attendee.late : false}
-                onChange={handleLateChange} />{' '}Late
+                onChange={this.handleLateChange} />{' '}Late
             </label>
           </td>
           <td> {/* Veg Checkbox */}
@@ -93,14 +105,15 @@ export class AttendeesTable extends React.Component<void, Props, void> {
                 disabled={this.props.ui.veg_checkbox_disabled}
                 type='checkbox'
                 checked={is_vegetarian}
-                onChange={handleVegChange} />{' '}Veg
+                onChange={this.handleVegChange} />{' '}Veg
             </label>
           </td>
           <td> {/* Add Guest Button */}
             <button
+              value={r.id}
               disabled={this.props.ui.add_guest_button_disabled}
               type='button'
-              onClick={handleGuestAdd}>+ Guest</button>
+              onClick={this.handleOpenGuestModal}>+ Guest</button>
           </td>
         </tr>
       )

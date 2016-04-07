@@ -12,9 +12,6 @@ export const UPDATE_COST_1 = 'UPDATE_COST_1'
 // ------------------------------------
 // Actions
 // ------------------------------------
-// NOTE: "Action" is a Flow interface defined in https://github.com/TechnologyAdvice/flow-interfaces
-// If you're unfamiliar with Flow, you are completely welcome to avoid annotating your code, but
-// if you'd like to learn more you can check out: flowtype.org.
 export const updateCook1 = (payload: Object): Action => ({
   type: UPDATE_COOK_1,
   payload: payload

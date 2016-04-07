@@ -6,9 +6,6 @@ export const ACTIONTYPE = 'ACTIONTYPE'
 // ------------------------------------
 // Actions
 // ------------------------------------
-// NOTE: "Action" is a Flow interface defined in https://github.com/TechnologyAdvice/flow-interfaces
-// If you're unfamiliar with Flow, you are completely welcome to avoid annotating your code, but
-// if you'd like to learn more you can check out: flowtype.org.
 export const residentsAction = (payload: Object): Action => ({
   type: ACTIONTYPE,
   payload: payload
@@ -41,7 +38,8 @@ export const actions = {
 export type ResidentSchema = {
   id: number,
   name: string,
-  unit: string
+  unit: string,
+  vegetarian: boolean
 };
 export type ResidentsSchema = Array<ResidentSchema>;
 

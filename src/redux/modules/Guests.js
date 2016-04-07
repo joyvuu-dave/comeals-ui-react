@@ -1,16 +1,27 @@
 /* @flow */
+import uuid from 'node-uuid'
+
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const ACTIONTYPE = 'ACTIONTYPE'
+export const ADD_GUEST = 'ADD_GUEST'
+export const REMOVE_GUEST = 'REMOVE_GUEST'
+export const TOGGLE_GUEST_VEG = 'TOGGLE_GUEST_VEG'
 // ------------------------------------
 // Actions
 // ------------------------------------
-// NOTE: "Action" is a Flow interface defined in https://github.com/TechnologyAdvice/flow-interfaces
-// If you're unfamiliar with Flow, you are completely welcome to avoid annotating your code, but
-// if you'd like to learn more you can check out: flowtype.org.
-export const guestsAction = (payload: Object): Action => ({
-  type: ACTIONTYPE,
+export const addGuest = (payload: Object): Action => ({
+  type: ADD_GUEST,
+  payload: payload
+})
+
+export const removeGuest = (payload: Object): Action => ({
+  type: REMOVE_GUEST,
+  payload: payload
+})
+
+export const toggleGuestVeg = (payload: Object): Action => ({
+  type: TOGGLE_GUEST_VEG,
   payload: payload
 })
 
@@ -31,7 +42,9 @@ export const requestGuests = (): Function => {
 }
 
 export const actions = {
-  guestsAction,
+  addGuest,
+  removeGuest,
+  toggleGuestVeg,
   requestGuests
 }
 
@@ -39,23 +52,39 @@ export const actions = {
 // Model
 // ------------------------------------
 export type GuestSchema = {
-  id: number,
-  host: string,
-  category: string,
+  id: string,
+  resident_id: number,
+  multiplier: number,
   vegetarian: boolean
 };
 export type GuestsSchema = Array<GuestSchema>;
 
 const initialState: GuestsSchema = [
-  {id: 1, host: 'Bob', category: 'Adult', vegetarian: false},
-  {id: 2, host: 'Julia', category: 'Child', vegetarian: true}
+  {id: uuid.v1(), resident_id: 1, multiplier: 2, vegetarian: false},
+  {id: uuid.v1(), resident_id: 2, multiplier: 1, vegetarian: true}
 ]
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ACTIONTYPE]: (state: GuestsSchema, action): GuestsSchema => initialState
+  [ADD_GUEST]: (state: GuestsSchema, action): GuestsSchema => {
+    return [
+      ...state,
+      action.payload
+    ]
+  },
+  [REMOVE_GUEST]: (state: GuestsSchema, action): GuestsSchema =>
+    state.filter((guest) => guest.id !== action.payload.id),
+  [TOGGLE_GUEST_VEG]: (state: GuestsSchema, action): GuestsSchema => {
+    return state.map((guest) => {
+      if (guest.id !== action.payload.id) {
+        return guest
+      } else {
+        return Object.assign({}, guest, {vegetarian: !guest.vegetarian})
+      }
+    })
+  }
 }
 
 // ------------------------------------
