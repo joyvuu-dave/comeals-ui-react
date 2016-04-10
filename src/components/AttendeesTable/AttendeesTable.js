@@ -33,6 +33,7 @@ export class AttendeesTable extends React.Component<void, Props, void> {
     this.handleLateChange = this.handleLateChange.bind(this)
     this.handleVegChange = this.handleVegChange.bind(this)
     this.handleOpenGuestModal = this.handleOpenGuestModal.bind(this)
+    this.getVegDisabled = this.getVegDisabled.bind(this)
   }
 
   handleAttendanceClick (e) {
@@ -71,6 +72,10 @@ export class AttendeesTable extends React.Component<void, Props, void> {
     })
   }
 
+  getVegDisabled (attendee) {
+    return this.props.ui.veg_checkbox_disabled || !attendee
+  }
+
   renderResidents (): Array<React$Element> {
     return this.props.residents.map((r) => {
       let attendee = this.props.meal_residents.find((mr) => mr.resident_id === r.id)
@@ -102,7 +107,7 @@ export class AttendeesTable extends React.Component<void, Props, void> {
             <label>
               <input
                 value={r.id}
-                disabled={this.props.ui.veg_checkbox_disabled}
+                disabled={this.getVegDisabled(attendee)}
                 type='checkbox'
                 checked={is_vegetarian}
                 onChange={this.handleVegChange} />{' '}Veg
