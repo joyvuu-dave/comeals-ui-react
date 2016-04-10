@@ -92,7 +92,7 @@ export class AttendeesTable extends React.Component<void, Props, void> {
             <label>
               <input
                 value={r.id}
-                disabled={attendee ? this.props.late_checkbox_disabled : true}
+                disabled={attendee ? this.props.ui.late_checkbox_disabled : true}
                 type='checkbox'
                 checked={attendee ? attendee.late : false}
                 onChange={this.handleLateChange} />{' '}Late

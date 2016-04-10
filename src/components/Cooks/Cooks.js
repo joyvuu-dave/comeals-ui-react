@@ -31,8 +31,12 @@ type BillActionsSchema = {
 };
 
 type Props = {
-  bills: BillsSchema,
+  ui: {
+    select_disabled: boolean,
+    input_disabled: boolean
+  },
   residents: ResidentsSchema,
+  bills: BillsSchema,
   actions: BillActionsSchema
 };
 
@@ -43,18 +47,21 @@ export class Cooks extends React.Component<void, Props, void> {
         <div className={classes['cooks-container']}>
           <h3 className={classes['cooks-title']}>Cooks</h3>
           <Cook
+            ui={this.props.ui}
             bill={this.props.bills['1']}
             residents={this.props.residents}
             num={1}
             updateCook={this.props.actions['1'].updateCook}
             updateCost={this.props.actions['1'].updateCost} />
           <Cook
+            ui={this.props.ui}
             bill={this.props.bills['2']}
             residents={this.props.residents}
             num={2}
             updateCook={this.props.actions['2'].updateCook}
             updateCost={this.props.actions['2'].updateCost} />
           <Cook
+            ui={this.props.ui}
             bill={this.props.bills['3']}
             residents={this.props.residents}
             num={3}

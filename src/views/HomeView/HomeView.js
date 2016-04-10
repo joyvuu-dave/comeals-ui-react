@@ -5,6 +5,7 @@ import classes from './HomeView.scss'
 import { createSelector } from 'reselect'
 
 // Actions
+import { setCurrentTime, fetchInitialDataAsync, persistMealAsync } from '../../redux/modules/App'
 import { updateDescription, updateExtras, updateAutoClose, closeMeal } from '../../redux/modules/Meal'
 import { updateCook1, updateCost1 } from '../../redux/modules/Bill1'
 import { updateCook2, updateCost2 } from '../../redux/modules/Bill2'
@@ -33,7 +34,7 @@ import GuestModal from '../../components/GuestModal/GuestModal'
 import type { MealSchema } from '../../redux/modules/Meal'
 import type { ResidentsSchema } from '../../redux/modules/Residents'
 import type { MealResidentsSchema } from '../../redux/modules/MealResidents'
-import type { BillsSchema } from '../../redux/modules/bill'
+import type { BillsSchema } from '../../redux/modules/bills'
 import type { GuestsSchema } from '../../redux/modules/Guests'
 import type { ActionsSchema } from '../../redux/modules/actions'
 import type { UISchema } from '../../redux/modules/UI'
@@ -53,6 +54,11 @@ type Props = {
 };
 
 export class HomeView extends React.Component<void, Props, void> {
+  componentDidMount () {
+    this.props.actions.app.fetchInitialDataAsync()
+    setInterval(this.props.actions.app.setCurrentTime, 60000)
+  }
+
   render () {
     return (
       <main className={classes.main}>
@@ -63,7 +69,9 @@ export class HomeView extends React.Component<void, Props, void> {
               date={this.props.data.meal.date}
               hasPrev={this.props.data.meal.hasPrev}
               hasNext={this.props.data.meal.hasNext}
-              status={this.props.data.meal.status} />
+              status={this.props.data.meal.status}
+              ui={this.props.ui.save_button}
+              persistMealAsync={this.props.actions.app.persistMealAsync} />
             <Menu
               disabled={this.props.ui.menu.textarea_disabled}
               description={this.props.data.meal.description}
@@ -71,8 +79,7 @@ export class HomeView extends React.Component<void, Props, void> {
           </section>
           <section className={classes['cooks-and-signups']}>
             <Cooks
-              select_disabled={this.props.ui.cooks.select_disabled}
-              input_disabled={this.props.ui.cooks.input_disabled}
+              ui={this.props.ui.cooks}
               residents={this.props.data.residents}
               bills={this.props.data.bills}
               actions={this.props.actions.bills} />
@@ -130,6 +137,8 @@ const fourty_eight_hours = 48 * 60 * 60 * 1000
 
 // App
 const getCurrentTime = (state) => state.app.current_time
+const getHasLoaded = (state) => state.app.hasLoaded
+const getIsDirty = (state) => state.app.isDirty
 
 // Meal
 // meal.reconciled
@@ -178,8 +187,12 @@ export const getOpen = createSelector(
 
 // meal.status
 export const getMealStatus = createSelector(
-  [ getReconciled, getPassed, getClosed ],
-  (reconciled, passed, closed) => {
+  [ getHasLoaded, getReconciled, getPassed, getClosed ],
+  (hasLoaded, reconciled, passed, closed) => {
+    if (!hasLoaded) {
+      return 'LOADING...'
+    }
+
     if (reconciled) {
       return 'RECONCILED' // no changes at all
     } else if (closed) {
@@ -216,8 +229,17 @@ export const getAttendeesCount = createSelector(
 export const getVegetarians = createSelector(
   [ getMealResidents, getGuests ],
   (meal_residents, guests) => {
-    return meal_residents.filter((meal_resident) => meal_resident.vegetarian).length +
-           guests.filter((guest) => guest.vegetarian).length
+    let meal_resident_veg_count = 0
+    if (meal_residents.length > 0) {
+      meal_resident_veg_count = meal_residents.filter((meal_resident) => meal_resident.vegetarian).length
+    }
+
+    let guest_veg_count = 0
+    if (guests.length > 0) {
+      guest_veg_count = guests.filter((guest) => guest.vegetarian).length
+    }
+
+    return meal_resident_veg_count + guest_veg_count
   }
 )
 
@@ -233,7 +255,12 @@ export const getOmnivores = createSelector(
 export const getLate = createSelector(
   [ getMealResidents ],
   (meal_residents) => {
-    return meal_residents.filter((meal_resident) => meal_resident.late).length
+    let meal_resident_late_count = 0
+    if (meal_residents.length > 0) {
+      meal_resident_late_count = meal_residents.filter((meal_resident) => meal_resident.late).length
+    }
+
+    return meal_resident_late_count
   }
 )
 
@@ -376,6 +403,28 @@ export const get_remove_guest_button_disabled = createSelector(
   }
 )
 
+// Save Button
+export const get_save_button_hidden = createSelector(
+  [ getIsDirty ],
+  (isDirty) => {
+    return !isDirty
+  }
+)
+
+export const get_save_button_disabled = createSelector(
+  [ getIsFetching ],
+  (isFetching) => {
+    return isFetching
+  }
+)
+
+export const get_save_button_value = createSelector(
+  [ getIsFetching ],
+  (isFetching) => {
+    return isFetching ? 'Saving...' : 'Save'
+  }
+)
+
 const mapStateToProps = (state) => {
   return {
     app: state.app,
@@ -420,6 +469,11 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         guest_modal: stateProps.guest_modal
       },
       actions: {
+        app: {
+          fetchInitialDataAsync: dispatchProps.fetchInitialDataAsync,
+          setCurrentTime: dispatchProps.setCurrentTime,
+          persistMealAsync: dispatchProps.persistMealAsync
+        },
         meal: {
           updateDescription: dispatchProps.updateDescription,
           updateExtras: dispatchProps.updateExtras,
@@ -489,6 +543,11 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         guests: {
           veg_checkbox_disabled: get_guest_veg_checkbox_disabled(stateProps),
           remove_button_disabled: get_remove_guest_button_disabled(stateProps)
+        },
+        save_button: {
+          hidden: get_save_button_hidden(stateProps),
+          disabled: get_save_button_disabled(stateProps),
+          value: get_save_button_value(stateProps)
         }
       }
     }
@@ -498,6 +557,9 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 export default connect(
   mapStateToProps,
   {
+    fetchInitialDataAsync,
+    setCurrentTime,
+    persistMealAsync,
     updateDescription,
     updateExtras,
     updateAutoClose,

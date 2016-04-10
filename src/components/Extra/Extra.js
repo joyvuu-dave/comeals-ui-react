@@ -1,6 +1,7 @@
 // rendered by MealView
 import React from 'react'
 import classes from './Extra.scss'
+import classNames from 'classnames'
 
 type Props = {
   // Auto-Close Checkbox
@@ -27,6 +28,8 @@ export class Extra extends React.Component<void, Props, void> {
     this.handleExtrasChange = this.handleExtrasChange.bind(this)
     this.handleAutoCloseChange = this.handleAutoCloseChange.bind(this)
     this.handleCloseClick = this.handleCloseClick.bind(this)
+    this.getAutoCloseClasses = this.getAutoCloseClasses.bind(this)
+    this.getCloseButtonClasses = this.getCloseButtonClasses.bind(this)
   }
 
   handleExtrasChange (e) {
@@ -39,6 +42,17 @@ export class Extra extends React.Component<void, Props, void> {
 
   handleCloseClick (e) {
     this.props.closeMeal()
+  }
+
+  getAutoCloseClasses () {
+    return this.props.auto_close_checkbox_hidden
+      /* eslint-disable no-sequences */
+      ? classNames(classes.hide, classes['auto-close']) : classes['auto-close']
+  }
+
+  getCloseButtonClasses () {
+    return this.props.close_button_hidden
+      ? classes.hide : ''
   }
 
   render () {
@@ -56,15 +70,14 @@ export class Extra extends React.Component<void, Props, void> {
           {/* Close Button */}
           <button
             type='button'
-            hidden={this.props.close_button_hidden}
+            className={this.getCloseButtonClasses()}
             disabled={this.props.close_button_disabled}
             onClick={this.handleCloseClick}>Close
           </button>
 
           {/* Auto-Close Checkbox */}
           <label
-            className={classes['auto-close']}
-            hidden={this.props.auto_close_checkbox_hidden}>
+            className={this.getAutoCloseClasses()}>
             <input
               type='checkbox'
               checked={this.props.auto_close}

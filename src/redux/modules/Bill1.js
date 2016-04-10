@@ -48,9 +48,9 @@ export const Bill1Actions = {
 // Model
 // ------------------------------------
 const initialState: BillSchema = {
-  id: 11,
-  resident_id: 1,
-  amount: 111.11
+  id: '',
+  resident_id: '',
+  amount: ''
 }
 
 // ------------------------------------
@@ -58,7 +58,14 @@ const initialState: BillSchema = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [UPDATE_COOK_1]: (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
-  [UPDATE_COST_1]: (state: BillSchema, action): BillSchema => ({...state, ...action.payload})
+  [UPDATE_COST_1]: (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
+  ['SET_INITIAL_DATA_SYNC']: (state: BillSchema, action): BillSchema => {
+    if (action.payload.bills && action.payload.bills.length > 0) {
+      return Object.assign({}, action.payload.bills[0])
+    } else {
+      return Object.assign({}, initialState)
+    }
+  }
 }
 
 // ------------------------------------

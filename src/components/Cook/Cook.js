@@ -7,6 +7,10 @@ import type { ResidentsSchema } from '../../redux/modules/Residents'
 import type { BillSchema } from '../../redux/modules/bill'
 
 type Props = {
+  ui: {
+    select_disabled: boolean,
+    input_disabled: boolean
+  },
   bill: BillSchema,
   residents: ResidentsSchema,
   num: number,
@@ -40,13 +44,16 @@ export class Cook extends React.Component<void, Props, void> {
       <section>
         <select
           className={classes['cook-select']}
+          disabled={this.props.ui.select_disabled}
           value={this.props.bill ? this.props.bill.resident_id : -1}
           onChange={this.handleSelectChange}>
           <option value={-1}>{`Cook ${this.props.num}`}</option>
           {this.renderOptions()}
         </select>
 
-        $<input className={classes['cook-input']}
+        $<input
+          className={classes['cook-input']}
+          disabled={this.props.ui.input_disabled}
           type='number'
           min='0'
           max='500'

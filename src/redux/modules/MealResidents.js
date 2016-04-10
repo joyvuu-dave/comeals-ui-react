@@ -63,12 +63,7 @@ export type MealResidentSchema = {
 
 export type MealResidentsSchema = Array<MealResidentSchema>;
 
-const initialState: MealResidentsSchema = [
-  {resident_id: 1, vegetarian: true, late: true},
-  {resident_id: 2, vegetarian: false, late: false},
-  {resident_id: 3, vegetarian: true, late: true},
-  {resident_id: 4, vegetarian: false, late: false}
-]
+const initialState: MealResidentsSchema = []
 
 // ------------------------------------
 // Action Handlers
@@ -99,7 +94,9 @@ const ACTION_HANDLERS = {
         return Object.assign({}, meal_resident, {late: !meal_resident.late})
       }
     })
-  }
+  },
+  ['SET_INITIAL_DATA_SYNC']: (state: MealResidentsSchema, action): MealResidentsSchema =>
+    Object.assign([], action.payload.meal_residents)
 }
 
 // ------------------------------------

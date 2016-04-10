@@ -1,6 +1,4 @@
 /* @flow */
-import uuid from 'node-uuid'
-
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -59,10 +57,7 @@ export type GuestSchema = {
 };
 export type GuestsSchema = Array<GuestSchema>;
 
-const initialState: GuestsSchema = [
-  {id: uuid.v1(), resident_id: 1, multiplier: 2, vegetarian: false},
-  {id: uuid.v1(), resident_id: 2, multiplier: 1, vegetarian: true}
-]
+const initialState: GuestsSchema = []
 
 // ------------------------------------
 // Action Handlers
@@ -84,7 +79,9 @@ const ACTION_HANDLERS = {
         return Object.assign({}, guest, {vegetarian: !guest.vegetarian})
       }
     })
-  }
+  },
+  ['SET_INITIAL_DATA_SYNC']: (state: GuestSchema, action): GuestsSchema =>
+    Object.assign([], action.payload.guests)
 }
 
 // ------------------------------------

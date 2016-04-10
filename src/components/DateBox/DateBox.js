@@ -6,13 +6,20 @@ import classes from './DateBox.scss'
 import MealDate from '../MealDate/MealDate'
 import PrevNext from '../PrevNext/PrevNext'
 import Status from '../Status/Status'
+import SaveButton from '../SaveButton/SaveButton'
 
 type Props = {
   meal_id: number,
   date: string,
   hasPrev: boolean,
   hasNext: boolean,
-  status: string
+  status: string,
+  ui: {
+    disabled: boolean,
+    hidden: boolean,
+    value: string
+  },
+  persistMealAsync: Function
 };
 
 export class DateBox extends React.Component<void, Props, void> {
@@ -25,6 +32,9 @@ export class DateBox extends React.Component<void, Props, void> {
             hasNext={this.props.hasNext}
             meal_id={this.props.meal_id} />
           <Status status={this.props.status} />
+          <SaveButton
+            ui={this.props.ui}
+            persistMealAsync={this.props.persistMealAsync} />
         </div>
       </section>
     )

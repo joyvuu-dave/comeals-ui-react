@@ -25,7 +25,7 @@ export type ActionsSchema = {
     toggleVeg: Function,
     toggleLate: Function,
     toggleGuestModal: Function
-  }
+  },
   guests: {
     remove: Function,
     toggleVeg: Function

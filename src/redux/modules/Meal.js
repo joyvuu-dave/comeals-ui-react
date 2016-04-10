@@ -35,22 +35,6 @@ export const closeMeal = (payload: string): Action => ({
   type: CLOSE_MEAL
 })
 
-// This is a thunk, meaning it is a function that immediately
-// returns a function for lazy evaluation. It is incredibly useful for
-// creating async actions, especially when combined with redux-thunk!
-// NOTE: This is solely for demonstration purposes. In a real application,
-// you'd probably want to dispatch an action and let the
-// reducer take care of this logic.
-export const requestMeal = (): Function => {
-  return (dispatch: Function, getState: Function): Promise => {
-    return new Promise((resolve: Function): void => {
-      setTimeout(() => {
-        resolve()
-      }, 10)
-    })
-  }
-}
-
 export const mealActions = {
   updateDescription,
   updateExtras,
@@ -66,7 +50,6 @@ export type MealSchema = {
   description: string,
   date: string,
   epoch: number,
-  current_time: number,
   max: number,
   auto_close: boolean,
   closed: boolean,
@@ -76,16 +59,15 @@ export type MealSchema = {
 };
 
 const initialState: MealSchema = {
-  id: 42,
-  description: 'Soylent for everyone!',
-  date: new Date(2016, 3, 8).toDateString(),
-  epoch: Date.parse(new Date(2016, 3, 8)),
-  current_time: Date.parse(new Date(2016, 3, 7)),
+  id: null,
+  description: '',
+  date: '',
+  epoch: null,
   max: null,
   auto_close: false,
   closed_in_database: false,
   reconciled: false,
-  hasNext: true,
+  hasNext: false,
   hasPrev: false
 }
 
@@ -96,7 +78,20 @@ const ACTION_HANDLERS = {
   [UPDATE_DESCRIPTION]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
   [UPDATE_EXTRAS]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
   [UPDATE_AUTO_CLOSE]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
-  [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => Object.assign({}, state, {closed_in_database: true})
+  [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => Object.assign({}, state, {closed_in_database: true}),
+  ['SET_INITIAL_DATA_SYNC']: (state: MealSchema, action): MealSchema =>
+    Object.assign({}, state, {
+      id: action.payload.id,
+      description: action.payload.description,
+      date: action.payload.date,
+      epoch: action.payload.epoch,
+      max: action.payload.max,
+      auto_close: action.payload.auto_close,
+      closed_in_database: action.payload.closed_in_database,
+      reconciled: action.payload.closed_in_database,
+      hasNext: action.payload.hasNext,
+      hasPrev: action.payload.hasPrev
+    })
 }
 
 // ------------------------------------

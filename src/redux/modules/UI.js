@@ -7,7 +7,7 @@ export type UISchema = {
   extras_input_disabled: boolean,
   close_button_hidden: boolean,
   close_button_disabled: boolean,
-  auto_close_checkbox_hidden:  boolean,
+  auto_close_checkbox_hidden: boolean,
   auto_close_checkbox_disabled: boolean,
   checked_attendance_checkbox_disabled: boolean,
   unchecked_attendance_checkbox_disabled: boolean,
