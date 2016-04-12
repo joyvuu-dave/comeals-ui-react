@@ -27,11 +27,11 @@ export class GuestsTable extends React.Component<void, Props, void> {
   }
 
   handleToggleVeg (e) {
-    this.props.actions.toggleVeg({id: e.target.value})
+    this.props.actions.toggleVeg({id: Number(e.target.value)})
   }
 
   handleGuestRemove (e) {
-    this.props.actions.remove({id: e.target.value})
+    this.props.actions.remove({id: Number(e.target.value)})
   }
 
   renderHost (id) {

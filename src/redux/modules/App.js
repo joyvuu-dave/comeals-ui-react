@@ -45,8 +45,8 @@ export type InitialStateSchema = {
 const dummyInitialData = {
   id: 99,
   description: 'Pizza, salad, and cake',
-  date: 'Sat Apr 11, 2016',
-  epoch: Date.parse(new Date(2016, 3, 11)),
+  date: 'Sat Apr 13, 2016',
+  epoch: Date.parse(new Date(2016, 3, 13)),
   max: null,
   auto_close: false,
   closed: false,
