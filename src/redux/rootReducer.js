@@ -11,6 +11,7 @@ import bill3 from './modules/Bill3'
 import meal_residents from './modules/MealResidents'
 import guests from './modules/Guests'
 import guest_modal from './modules/GuestModal'
+import persisted_data from './modules/PersistedData'
 
 export default combineReducers({
   router,
@@ -22,5 +23,6 @@ export default combineReducers({
   bill3,
   meal_residents,
   guests,
-  guest_modal
+  guest_modal,
+  persisted_data
 })

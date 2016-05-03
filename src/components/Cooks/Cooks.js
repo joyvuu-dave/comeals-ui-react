@@ -27,13 +27,19 @@ type BillActionsSchema = {
   '3': {
     updateCook: Function,
     updateCost: Function
-  }
+  },
+  validateBill: Function
 };
 
 type Props = {
   ui: {
     select_disabled: boolean,
-    input_disabled: boolean
+    input_disabled: boolean,
+    error_message: {
+      '1': string,
+      '2': string,
+      '3': string
+    }
   },
   residents: ResidentsSchema,
   bills: BillsSchema,
@@ -47,6 +53,7 @@ export class Cooks extends React.Component<void, Props, void> {
         <div className={classes['cooks-container']}>
           <h3 className={classes['cooks-title']}>Cooks</h3>
           <Cook
+            key={1}
             ui={this.props.ui}
             bill={this.props.bills['1']}
             residents={this.props.residents}
@@ -54,6 +61,7 @@ export class Cooks extends React.Component<void, Props, void> {
             updateCook={this.props.actions['1'].updateCook}
             updateCost={this.props.actions['1'].updateCost} />
           <Cook
+            key={2}
             ui={this.props.ui}
             bill={this.props.bills['2']}
             residents={this.props.residents}
@@ -61,6 +69,7 @@ export class Cooks extends React.Component<void, Props, void> {
             updateCook={this.props.actions['2'].updateCook}
             updateCost={this.props.actions['2'].updateCost} />
           <Cook
+            key={3}
             ui={this.props.ui}
             bill={this.props.bills['3']}
             residents={this.props.residents}

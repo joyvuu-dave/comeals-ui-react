@@ -1,7 +1,6 @@
 // rendered by MealView
 import React from 'react'
 import Modal from 'react-modal'
-import uuid from 'node-uuid'
 
 type Props = {
   data: {
@@ -38,7 +37,6 @@ export class GuestModal extends React.Component<void, Props, void> {
 
   handleAddGuestClick (e) {
     this.props.actions.addGuest({
-      id: uuid.v1(),
       resident_id: this.props.data.resident_id,
       multiplier: this.props.data.multiplier,
       vegetarian: this.props.data.vegetarian

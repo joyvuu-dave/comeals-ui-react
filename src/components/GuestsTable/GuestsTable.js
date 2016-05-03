@@ -27,11 +27,11 @@ export class GuestsTable extends React.Component<void, Props, void> {
   }
 
   handleToggleVeg (e) {
-    this.props.actions.toggleVeg({id: Number(e.target.value)})
+    this.props.actions.toggleVeg({cid: e.target.value})
   }
 
   handleGuestRemove (e) {
-    this.props.actions.remove({id: Number(e.target.value)})
+    this.props.actions.remove({cid: e.target.value})
   }
 
   renderHost (id) {
@@ -50,12 +50,12 @@ export class GuestsTable extends React.Component<void, Props, void> {
 
   renderGuests () {
     return this.props.guests.map((g) =>
-      <tr key={g.id} className={classes.guest}>
+      <tr key={g.cid} className={classes.guest}>
         <td>{this.renderHost(g.resident_id)}</td>
         <td>{this.renderCategory(g.multiplier)}</td>
         <td>
           <input
-            value={g.id}
+            value={g.cid}
             disabled={this.props.ui.veg_checkbox_disabled}
             type='checkbox'
             checked={g.vegetarian}
@@ -63,7 +63,7 @@ export class GuestsTable extends React.Component<void, Props, void> {
         </td>
         <td>
           <button
-            value={g.id}
+            value={g.cid}
             disabled={this.props.ui.remove_button_disabled}
             type='button'
             onClick={this.handleGuestRemove}>- Guest</button>

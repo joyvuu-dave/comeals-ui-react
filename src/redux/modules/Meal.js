@@ -16,22 +16,25 @@ export const fetchMeal = (payload: string): Action => ({
   payload: payload
 })
 
-export const updateDescription = (payload: string): Action => ({
+type DescriptionPayload = {description: string};
+export const updateDescription = (payload: DescriptionPayload): Action => ({
   type: UPDATE_DESCRIPTION,
   payload: payload
 })
 
-export const updateExtras = (payload: string): Action => ({
+type ExtrasPayload = {max: number};
+export const updateExtras = (payload: ExtrasPayload): Action => ({
   type: UPDATE_EXTRAS,
   payload: payload
 })
 
-export const updateAutoClose = (payload: string): Action => ({
+type AutoClosePayload = {auto_close: boolean};
+export const updateAutoClose = (payload: AutoClosePayload): Action => ({
   type: UPDATE_AUTO_CLOSE,
   payload: payload
 })
 
-export const closeMeal = (payload: string): Action => ({
+export const closeMeal = (): Action => ({
   type: CLOSE_MEAL
 })
 
@@ -54,8 +57,8 @@ export type MealSchema = {
   auto_close: boolean,
   closed: boolean,
   reconciled: boolean,
-  hasNext: boolean,
-  hasPrev: boolean
+  prevId: number,
+  nextId: number
 };
 
 const initialState: MealSchema = {
@@ -67,8 +70,8 @@ const initialState: MealSchema = {
   auto_close: false,
   closed_in_database: false,
   reconciled: false,
-  hasNext: false,
-  hasPrev: false
+  prevId: '',
+  nextId: ''
 }
 
 // ------------------------------------
@@ -89,8 +92,8 @@ const ACTION_HANDLERS = {
       auto_close: action.payload.auto_close,
       closed_in_database: action.payload.closed_in_database,
       reconciled: action.payload.closed_in_database,
-      hasNext: action.payload.hasNext,
-      hasPrev: action.payload.hasPrev
+      prevId: action.payload.prevId,
+      nextId: action.payload.nextId
     })
 }
 

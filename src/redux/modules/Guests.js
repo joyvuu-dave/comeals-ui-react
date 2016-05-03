@@ -1,4 +1,5 @@
 /* @flow */
+import uuid from 'uuid'
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -23,34 +24,18 @@ export const toggleGuestVeg = (payload: Object): Action => ({
   payload: payload
 })
 
-// This is a thunk, meaning it is a function that immediately
-// returns a function for lazy evaluation. It is incredibly useful for
-// creating async actions, especially when combined with redux-thunk!
-// NOTE: This is solely for demonstration purposes. In a real application,
-// you'd probably want to dispatch an action and let the
-// reducer take care of this logic.
-export const requestGuests = (): Function => {
-  return (dispatch: Function, getState: Function): Promise => {
-    return new Promise((resolve: Function): void => {
-      setTimeout(() => {
-        resolve()
-      }, 10)
-    })
-  }
-}
-
 export const actions = {
   addGuest,
   removeGuest,
-  toggleGuestVeg,
-  requestGuests
+  toggleGuestVeg
 }
 
 // ------------------------------------
 // Model
 // ------------------------------------
 export type GuestSchema = {
-  id: string,
+  id: number,
+  cid: string,
   resident_id: number,
   multiplier: number,
   vegetarian: boolean
@@ -64,24 +49,24 @@ const initialState: GuestsSchema = []
 // ------------------------------------
 const ACTION_HANDLERS = {
   [ADD_GUEST]: (state: GuestsSchema, action): GuestsSchema => {
+    const cid = uuid.v1()
     return [
       ...state,
-      action.payload
+      Object.assign({}, action.payload, {cid: cid})
     ]
   },
   [REMOVE_GUEST]: (state: GuestsSchema, action): GuestsSchema =>
-    state.filter((guest) => guest.id !== action.payload.id),
+    state.filter((guest) => guest.cid !== action.payload.cid),
   [TOGGLE_GUEST_VEG]: (state: GuestsSchema, action): GuestsSchema => {
     return state.map((guest) => {
-      if (guest.id !== action.payload.id) {
+      if (guest.cid !== action.payload.cid) {
         return guest
       } else {
         return Object.assign({}, guest, {vegetarian: !guest.vegetarian})
       }
     })
   },
-  ['SET_INITIAL_DATA_SYNC']: (state: GuestSchema, action): GuestsSchema =>
-    Object.assign([], action.payload.guests)
+  ['SET_INITIAL_DATA_SYNC']: (state: GuestsSchema, action): GuestsSchema => []
 }
 
 // ------------------------------------

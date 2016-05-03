@@ -1,10 +1,11 @@
 // rendered by DateBox
 import React from 'react'
+import { Link } from 'react-router'
 import classes from './PrevNext.scss'
 
 type Props = {
-  hasPrev: boolean,
-  hasNext: boolean,
+  prevId: number,
+  nextId: number,
   meal_id: number
 };
 
@@ -13,15 +14,15 @@ export class PrevNext extends React.Component<void, Props, void> {
   render () {
     return (
       <section>
-        <a className={this.props.hasPrev ? '' : classes['hidden']} href={`/meals/${this.props.meal_id}/edit?q=prev`}>
+        <Link className={this.props.prevId ? '' : classes['hidden']} to={`/meals/${this.props.prevId}`}>
           <div className={classes['icono-previous']}></div>
           Prev
-        </a>
+        </Link>
         {' '}
-        <a className={this.props.hasNext ? '' : classes['hidden']} href={`/meals/${this.props.meal_id}/edit?q=next`}>
+        <Link className={this.props.nextId ? '' : classes['hidden']} to={`/meals/${this.props.nextId}`}>
           Next
           <div className={classes['icono-next']}></div>
-        </a>
+        </Link>
       </section>
     )
   }

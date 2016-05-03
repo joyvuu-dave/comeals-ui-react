@@ -2,7 +2,7 @@
 // ------------------------------------
 // Schema Definition
 // ------------------------------------
-import type { BillSchema } from './bill'
+import type { BillSchema, CookPayload, CostPayload } from './bill'
 
 // ------------------------------------
 // Constants
@@ -12,36 +12,19 @@ export const UPDATE_COST_2 = 'UPDATE_COST_2'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const updateCook2 = (payload: Object): Action => ({
+export const updateCook2 = (payload: CookPayload): Action => ({
   type: UPDATE_COOK_2,
   payload: payload
 })
 
-export const updateCost2 = (payload: Object): Action => ({
+export const updateCost2 = (payload: CostPayload): Action => ({
   type: UPDATE_COST_2,
   payload: payload
 })
 
-// This is a thunk, meaning it is a function that immediately
-// returns a function for lazy evaluation. It is incredibly useful for
-// creating async actions, especially when combined with redux-thunk!
-// NOTE: This is solely for demonstration purposes. In a real application,
-// you'd probably want to dispatch an action and let the
-// reducer take care of this logic.
-export const requestBill2 = (): Function => {
-  return (dispatch: Function, getState: Function): Promise => {
-    return new Promise((resolve: Function): void => {
-      setTimeout(() => {
-        resolve()
-      }, 10)
-    })
-  }
-}
-
 export const Bill2Actions = {
   updateCook2,
-  updateCost2,
-  requestBill2
+  updateCost2
 }
 
 // ------------------------------------
@@ -49,7 +32,7 @@ export const Bill2Actions = {
 // ------------------------------------
 const initialState: BillSchema = {
   id: '',
-  resident_id: '',
+  resident_id: -1,
   amount: ''
 }
 
