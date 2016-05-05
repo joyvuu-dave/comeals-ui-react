@@ -10,15 +10,22 @@ import SaveButton from '../SaveButton/SaveButton'
 import CancelButton from '../CancelButton/CancelButton'
 
 type Props = {
-  meal_id: number,
   date: string,
   prevId: number,
   nextId: number,
   status: string,
-  ui: {
+  save_button_ui: {
     disabled: boolean,
     hidden: boolean,
     value: string
+  },
+  cancel_button_ui: {
+    disable: boolean,
+    hidden: boolean
+  },
+  links_ui: {
+    disabled: boolean,
+    hidden: boolean
   },
   persistMealAsync: Function,
   cancelChanges: Function
@@ -28,19 +35,19 @@ export class DateBox extends React.Component<void, Props, void> {
   render () {
     return (
       <section className={classes['date-box']}>
-        <div className={classes['date_box_container']}>
+        <div className={classes['date-box-container']}>
           <MealDate date={this.props.date} />
           <PrevNext
             prevId={this.props.prevId}
             nextId={this.props.nextId}
-            meal_id={this.props.meal_id} />
+            ui={this.props.links_ui} />
           <Status status={this.props.status} />
           <CancelButton
-            ui={this.props.ui}
+            ui={this.props.cancel_button_ui}
             cancelChanges={this.props.cancelChanges} />
           {' '}
           <SaveButton
-            ui={this.props.ui}
+            ui={this.props.save_button_ui}
             persistMealAsync={this.props.persistMealAsync} />
         </div>
       </section>

@@ -34,6 +34,11 @@ https://github.com/saeedalipoor/icono
   pointer-events: none;
 }
 
-.hidden {
+.hide {
   visibility: hidden;
+}
+
+.link {
+  color: inherit;
+  display: inline-block;
 }

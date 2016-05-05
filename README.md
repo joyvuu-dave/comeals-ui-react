@@ -12,8 +12,8 @@ BUGS
 
 MealResident Removal
 ====================
-- add _delete operator
-- don't dispaly checkboxes of one's w/ _delete
+- add _destroy operator
+- don't dispaly checkboxes of one's w/ _destroy
 
 
 

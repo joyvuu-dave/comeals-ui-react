@@ -1,37 +1,23 @@
 /* @flow */
 // ------------------------------------
-// Constants
-// ------------------------------------
-export const OPEN_GUEST_MODAL = 'OPEN_GUEST_MODAL'
-export const TOGGLE_MODAL_VEG = 'TOGGLE_MODAL_VEG'
-export const TOGGLE_MODAL_MULTIPLIER = 'TOGGLE_MODAL_MULTIPLIER'
-export const CLOSE_GUEST_MODAL = 'CLOSE_GUEST_MODAL'
-// ------------------------------------
 // Actions
 // ------------------------------------
 export const openGuestModal = (payload: Object): Action => ({
-  type: OPEN_GUEST_MODAL,
+  type: 'OPEN_GUEST_MODAL',
   payload: payload
 })
 
-export const toggleModalVeg = (payload: Object): Action => ({
-  type: TOGGLE_MODAL_VEG
+export const toggleModalVeg = (): Action => ({
+  type: 'TOGGLE_MODAL_VEG'
 })
 
-export const toggleModalMultiplier = (payload: Object): Action => ({
-  type: TOGGLE_MODAL_MULTIPLIER
+export const toggleModalMultiplier = (): Action => ({
+  type: 'TOGGLE_MODAL_MULTIPLIER'
 })
 
 export const closeGuestModal = (): Action => ({
-  type: CLOSE_GUEST_MODAL
+  type: 'CLOSE_GUEST_MODAL'
 })
-
-export const actions = {
-  openGuestModal,
-  toggleModalVeg,
-  toggleModalMultiplier,
-  closeGuestModal
-}
 
 // ------------------------------------
 // Model
@@ -56,12 +42,12 @@ const initialState: GuestModalSchema = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [OPEN_GUEST_MODAL]: (state: GuestModalSchema, action): GuestModalSchema => ({...state, ...action.payload}),
-  [TOGGLE_MODAL_VEG]: (state: GuestModalSchema, action): GuestModalSchema =>
+  'OPEN_GUEST_MODAL': (state: GuestModalSchema, action): GuestModalSchema => ({...state, ...action.payload}),
+  'TOGGLE_MODAL_VEG': (state: GuestModalSchema, action): GuestModalSchema =>
     Object.assign({}, state, {vegetarian: !state.vegetarian}),
-  [TOGGLE_MODAL_MULTIPLIER]: (state: GuestModalSchema, action): GuestModalSchema =>
+  'TOGGLE_MODAL_MULTIPLIER': (state: GuestModalSchema, action): GuestModalSchema =>
     Object.assign({}, state, {multiplier: state.multiplier ^ 3}),
-  [CLOSE_GUEST_MODAL]: (state: GuestModalSchema, action): GuestModalSchema => initialState
+  'CLOSE_GUEST_MODAL': (state: GuestModalSchema, action): GuestModalSchema => initialState
 }
 
 // ------------------------------------

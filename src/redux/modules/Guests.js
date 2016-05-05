@@ -1,34 +1,24 @@
 /* @flow */
 import uuid from 'uuid'
-// ------------------------------------
-// Constants
-// ------------------------------------
-export const ADD_GUEST = 'ADD_GUEST'
-export const REMOVE_GUEST = 'REMOVE_GUEST'
-export const TOGGLE_GUEST_VEG = 'TOGGLE_GUEST_VEG'
+
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const addGuest = (payload: Object): Action => ({
-  type: ADD_GUEST,
+  type: 'ADD_GUEST',
   payload: payload
 })
 
 export const removeGuest = (payload: Object): Action => ({
-  type: REMOVE_GUEST,
+  type: 'REMOVE_GUEST',
   payload: payload
 })
 
-export const toggleGuestVeg = (payload: Object): Action => ({
-  type: TOGGLE_GUEST_VEG,
+type ToggleGuestVegPayload = {cid: number};
+export const toggleGuestVeg = (payload: ToggleGuestVegPayload): Action => ({
+  type: 'TOGGLE_GUEST_VEG',
   payload: payload
 })
-
-export const actions = {
-  addGuest,
-  removeGuest,
-  toggleGuestVeg
-}
 
 // ------------------------------------
 // Model
@@ -48,16 +38,16 @@ const initialState: GuestsSchema = []
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ADD_GUEST]: (state: GuestsSchema, action): GuestsSchema => {
+  'ADD_GUEST': (state: GuestsSchema, action): GuestsSchema => {
     const cid = uuid.v1()
     return [
       ...state,
       Object.assign({}, action.payload, {cid: cid})
     ]
   },
-  [REMOVE_GUEST]: (state: GuestsSchema, action): GuestsSchema =>
+  'REMOVE_GUEST': (state: GuestsSchema, action): GuestsSchema =>
     state.filter((guest) => guest.cid !== action.payload.cid),
-  [TOGGLE_GUEST_VEG]: (state: GuestsSchema, action): GuestsSchema => {
+  'TOGGLE_GUEST_VEG': (state: GuestsSchema, action): GuestsSchema => {
     return state.map((guest) => {
       if (guest.cid !== action.payload.cid) {
         return guest
@@ -66,7 +56,8 @@ const ACTION_HANDLERS = {
       }
     })
   },
-  ['SET_INITIAL_DATA_SYNC']: (state: GuestsSchema, action): GuestsSchema => []
+  'REPLACE_GUESTS': (state: GuestsSchema, action): GuestSchema => Object.assign([], action.payload),
+  'RESET_STATE': (state: GuestsSchema, action): GuestsSchema => Object.assign([], initialState)
 }
 
 // ------------------------------------

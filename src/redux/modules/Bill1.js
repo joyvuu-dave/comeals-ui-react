@@ -2,31 +2,22 @@
 // ------------------------------------
 // Schema Definition
 // ------------------------------------
-import type { BillSchema, CookPayload, CostPayload } from './bill'
+import type { BillSchema } from './schema/schema'
 
-// ------------------------------------
-// Constants
-// ------------------------------------
-export const UPDATE_COOK_1 = 'UPDATE_COOK_1'
-export const UPDATE_COST_1 = 'UPDATE_COST_1'
-export const SHOW_COOK_1_ERRORS = 'SHOW_COOK_1_ERRORS'
 // ------------------------------------
 // Actions
 // ------------------------------------
+type CookPayload = {resident_id: number};
 export const updateCook1 = (payload: CookPayload): Action => ({
-  type: UPDATE_COOK_1,
+  type: 'UPDATE_COOK_1',
   payload: payload
 })
 
+type CostPayload = {amount: string};
 export const updateCost1 = (payload: CostPayload): Action => ({
-  type: UPDATE_COST_1,
+  type: 'UPDATE_COST_1',
   payload: payload
 })
-
-export const Bill1Actions = {
-  updateCook1,
-  updateCost1
-}
 
 // ------------------------------------
 // Model
@@ -41,15 +32,10 @@ const initialState: BillSchema = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  ['UPDATE_COOK_1']: (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
-  ['UPDATE_COST_1']: (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
-  ['SET_INITIAL_DATA_SYNC']: (state: BillSchema, action): BillSchema => {
-    if (action.payload.bills && action.payload.bills.length > 0) {
-      return Object.assign({}, action.payload.bills[0])
-    } else {
-      return Object.assign({}, initialState)
-    }
-  }
+  'UPDATE_COOK_1': (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
+  'UPDATE_COST_1': (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
+  'REPLACE_BILL_1': (state: BillSchema, action): BillSchema => Object.assign({}, action.payload),
+  'RESET_STATE': (state: BillSchema, action): BillSchema => Object.assign({}, initialState)
 }
 
 // ------------------------------------

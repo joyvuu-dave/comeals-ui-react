@@ -14,7 +14,7 @@ type Props = {
   ui: Object,
   actions: Object,
   residents: ResidentsSchema,
-  meal_residents: MealResidentsSchema
+  mealResidents: MealResidentsSchema
 };
 
 export class Attendees extends React.Component<void, Props, void> {
@@ -26,7 +26,7 @@ export class Attendees extends React.Component<void, Props, void> {
           ui={this.props.ui}
           actions={this.props.actions}
           residents={this.props.residents}
-          meal_residents={this.props.meal_residents} />
+          mealResidents={this.props.mealResidents} />
       </section>
     )
   }

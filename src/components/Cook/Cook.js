@@ -67,8 +67,8 @@ export class Cook extends React.Component<void, Props, void> {
           placeholder='food cost'
           value={this.props.bill ? this.props.bill.amount : ''}
           onChange={this.handleInputChange} />
-          {' '}
-          <span className={classes.alert}>{this.props.ui.error_message[this.props.num]}</span>
+        {' '}
+        <span className={classes.alert}>{this.props.ui.error_message[this.props.num]}</span>
       </section>
     )
   }

@@ -23,7 +23,7 @@ type Props = {
     openGuestModal: Function
   },
   residents: ResidentsSchema,
-  meal_residents: MealResidentsSchema
+  mealResidents: MealResidentsSchema
 };
 
 export class AttendeesTable extends React.Component<void, Props, void> {
@@ -37,17 +37,17 @@ export class AttendeesTable extends React.Component<void, Props, void> {
   }
 
   handleAttendanceClick (e) {
-    const meal_resident_ids = this.props.meal_residents.map((meal_resident) => meal_resident.resident_id)
+    const mealResidentIds = this.props.mealResidents.map((mealResident) => mealResident.resident_id)
     const id = Number(e.target.value)
 
-    if (meal_resident_ids.includes(id)) {
+    if (mealResidentIds.includes(id)) {
       this.props.actions.removeMealResident({resident_id: id})
     } else {
-      const is_vegetarian = this.props.residents.find((resident) => resident.id === id).vegetarian
+      const isVegetarian = this.props.residents.find((resident) => resident.id === id).vegetarian
 
       this.props.actions.addMealResident({
         resident_id: id,
-        vegetarian: is_vegetarian
+        vegetarian: isVegetarian
       })
     }
   }
@@ -78,8 +78,8 @@ export class AttendeesTable extends React.Component<void, Props, void> {
 
   renderResidents (): Array<React$Element> {
     return this.props.residents.map((r) => {
-      let attendee = this.props.meal_residents.find((mr) => mr.resident_id === r.id)
-      let is_vegetarian = attendee ? attendee.vegetarian : r.vegetarian
+      let attendee = this.props.mealResidents.find((mr) => mr.resident_id === r.id)
+      let isVegetarian = attendee ? attendee.vegetarian : r.vegetarian
 
       return (
         <tr key={r.id}>
@@ -109,7 +109,7 @@ export class AttendeesTable extends React.Component<void, Props, void> {
                 value={r.id}
                 disabled={this.getVegDisabled(attendee)}
                 type='checkbox'
-                checked={is_vegetarian}
+                checked={isVegetarian}
                 onChange={this.handleVegChange} />{' '}Veg
             </label>
           </td>

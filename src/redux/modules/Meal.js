@@ -1,49 +1,28 @@
 /* @flow */
 // ------------------------------------
-// Constants
-// ------------------------------------
-export const FETCH_MEAL = 'FETCH_MEAL'
-export const UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION'
-export const UPDATE_EXTRAS = 'UPDATE_EXTRAS'
-export const UPDATE_AUTO_CLOSE = 'UPDATE_AUTO_CLOSE'
-export const CLOSE_MEAL = 'CLOSE_MEAL'
-
-// ------------------------------------
 // Actions
 // ------------------------------------
-export const fetchMeal = (payload: string): Action => ({
-  type: FETCH_MEAL,
-  payload: payload
-})
-
 type DescriptionPayload = {description: string};
 export const updateDescription = (payload: DescriptionPayload): Action => ({
-  type: UPDATE_DESCRIPTION,
+  type: 'UPDATE_DESCRIPTION',
   payload: payload
 })
 
 type ExtrasPayload = {max: number};
 export const updateExtras = (payload: ExtrasPayload): Action => ({
-  type: UPDATE_EXTRAS,
+  type: 'UPDATE_EXTRAS',
   payload: payload
 })
 
 type AutoClosePayload = {auto_close: boolean};
 export const updateAutoClose = (payload: AutoClosePayload): Action => ({
-  type: UPDATE_AUTO_CLOSE,
+  type: 'UPDATE_AUTO_CLOSE',
   payload: payload
 })
 
 export const closeMeal = (): Action => ({
-  type: CLOSE_MEAL
+  type: 'CLOSE_MEAL'
 })
-
-export const mealActions = {
-  updateDescription,
-  updateExtras,
-  updateAutoClose,
-  closeMeal
-}
 
 // ------------------------------------
 // Model
@@ -78,23 +57,12 @@ const initialState: MealSchema = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [UPDATE_DESCRIPTION]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
-  [UPDATE_EXTRAS]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
-  [UPDATE_AUTO_CLOSE]: (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
-  [CLOSE_MEAL]: (state: MealSchema, action): MealSchema => Object.assign({}, state, {closed_in_database: true}),
-  ['SET_INITIAL_DATA_SYNC']: (state: MealSchema, action): MealSchema =>
-    Object.assign({}, state, {
-      id: action.payload.id,
-      description: action.payload.description,
-      date: action.payload.date,
-      epoch: action.payload.epoch,
-      max: action.payload.max,
-      auto_close: action.payload.auto_close,
-      closed_in_database: action.payload.closed_in_database,
-      reconciled: action.payload.closed_in_database,
-      prevId: action.payload.prevId,
-      nextId: action.payload.nextId
-    })
+  'UPDATE_DESCRIPTION': (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
+  'UPDATE_EXTRAS': (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
+  'UPDATE_AUTO_CLOSE': (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
+  'CLOSE_MEAL': (state: MealSchema, action): MealSchema => Object.assign({}, state, {closed_in_database: true}),
+  'REPLACE_MEAL': (state: MealSchema, action): MealSchema => Object.assign({}, action.payload),
+  'RESET_STATE': (state: MealSchema, action): MealSchema => Object.assign({}, initialState)
 }
 
 // ------------------------------------

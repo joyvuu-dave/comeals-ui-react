@@ -2,30 +2,22 @@
 // ------------------------------------
 // Schema Definition
 // ------------------------------------
-import type { BillSchema, CookPayload, CostPayload } from './bill'
+import type { BillSchema } from './schema/schema'
 
-// ------------------------------------
-// Constants
-// ------------------------------------
-export const UPDATE_COOK_3 = 'UPDATE_COOK_3'
-export const UPDATE_COST_3 = 'UPDATE_COST_3'
 // ------------------------------------
 // Actions
 // ------------------------------------
+type CookPayload = {resident_id: number};
 export const updateCook3 = (payload: CookPayload): Action => ({
-  type: UPDATE_COOK_3,
+  type: 'UPDATE_COOK_3',
   payload: payload
 })
 
+type CostPayload = {amount: string};
 export const updateCost3 = (payload: CostPayload): Action => ({
-  type: UPDATE_COST_3,
+  type: 'UPDATE_COST_3',
   payload: payload
 })
-
-export const Bill3Actions = {
-  updateCook3,
-  updateCost3
-}
 
 // ------------------------------------
 // Model
@@ -40,15 +32,10 @@ const initialState: BillSchema = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [UPDATE_COOK_3]: (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
-  [UPDATE_COST_3]: (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
-  ['SET_INITIAL_DATA_SYNC']: (state: BillSchema, action): BillSchema => {
-    if (action.payload.bills && action.payload.bills.length > 2) {
-      return Object.assign({}, action.payload.bills[2])
-    } else {
-      return Object.assign({}, initialState)
-    }
-  }
+  'UPDATE_COOK_3': (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
+  'UPDATE_COST_3': (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
+  'REPLACE_BILL_3': (state: BillSchema, action): BillSchema => Object.assign({}, action.payload),
+  'RESET_STATE': (state: BillSchema, action): BillSchema => Object.assign({}, initialState)
 }
 
 // ------------------------------------

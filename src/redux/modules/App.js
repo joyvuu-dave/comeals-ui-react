@@ -1,9 +1,4 @@
  /* @flow */
-// ------------------------------------
-// Dummy Initial Data
-// ------------------------------------
-import { DUMMY_DATA } from './data/index'
-
 // API Stuff
 import { polyfill } from 'es6-promise'
 polyfill()
@@ -12,10 +7,12 @@ import 'isomorphic-fetch'
 // ------------------------------------
 // Actions
 // ------------------------------------
-import type { ResidentSchema } from './Residents'
-import type { BillSchema } from './bill'
-import type { MealResidentSchema } from './MealResidents'
-import type { GuestSchema } from './Guests'
+import type {
+  BillSchema,
+  GuestSchema,
+  MealResidentSchema,
+  ResidentSchema
+} from './schema/schema'
 
 export type InitialStateSchema = {
   id: number,
@@ -30,34 +27,67 @@ export type InitialStateSchema = {
   nextId: number,
   residents: Array<ResidentSchema>,
   bills: Array<BillSchema>,
-  meal_residents: Array<MealResidentSchema>,
+  mealResidents: Array<MealResidentSchema>,
   guests: Array<GuestSchema>
 };
-
-export const setInitialDataSync = (payload: InitialStateSchema): Action => ({
-  type: 'SET_INITIAL_DATA_SYNC',
-  payload: payload
-})
-
-export const fetchRequest = (): Action => ({
-  type: 'FETCH_REQUEST'
-})
-
-export const fetchResponse = (): Action => ({
-  type: 'FETCH_RESPONSE'
-})
 
 export const setCurrentTime = (): Action => ({
   type: 'SET_CURRENT_TIME'
 })
 
-export const setIsLoading = (): Action => ({
-  type: 'SET_IS_LOADING'
+export const setIsLoading = (payload): Action => ({
+  type: 'SET_IS_LOADING',
+  payload: payload
 })
 
-export const setIsSaving = (): Action => ({
-  type: 'SET_IS_SAVING'
+export const setIsSaving = (payload): Action => ({
+  type: 'SET_IS_SAVING',
+  payload: payload
 })
+
+function setData (dispatch, data) {
+  // dispatch({type: 'RESET_STATE'})
+
+  // persisted data
+  // Fixme: currently this must happen before we can dipatch
+  //        ADD_GUESTS or there will be an error due to
+  //        the logic of the reducer that creates the guest patch object
+  dispatch({type: 'REPLACE_PERSISTED_DATA', payload: data})
+
+  // meal
+  dispatch({type: 'REPLACE_MEAL', payload: data.meal})
+
+  // bill1
+  if (data.bills.length > 0) {
+    dispatch({type: 'REPLACE_BILL_1', payload: data.bills[0]})
+  }
+
+  // bill2
+  if (data.bills.length > 1) {
+    dispatch({type: 'REPLACE_BILL_2', payload: data.bills[1]})
+  }
+
+  // bill3
+  if (data.bills.length > 2) {
+    dispatch({type: 'REPLACE_BILL_3', payload: data.bills[2]})
+  }
+
+  // residents
+  dispatch({type: 'REPLACE_RESIDENTS', payload: data.residents || []})
+
+  // meal_residents
+  dispatch({type: 'REPLACE_MEAL_RESIDENTS', payload: data.meal_residents || []})
+
+  // guests
+  dispatch({type: 'REPLACE_GUESTS', payload: []})
+  const guests = data.guests || []
+  guests.forEach((guest) => {
+    dispatch({
+      type: 'ADD_GUEST',
+      payload: guest
+    })
+  })
+}
 
 export const fetchMealAsync = (id): Function => {
   return (dispatch: Function, getState: Function) => {
@@ -67,76 +97,43 @@ export const fetchMealAsync = (id): Function => {
       fetch(`http://localhost:3001/api/meals/${id}`)
       .then((response) => response.json())
       .then((json) => {
-        dispatch(setInitialDataSync(json))
-
-        // set guests
-        const guests = json.guests
-        guests.forEach((guest) => {
-          dispatch({
-            type: 'ADD_GUEST',
-            payload: guest
-          })
-        })
+        setData(dispatch, json)
+        dispatch(setIsLoading({isLoading: false}))
       })
     }, 2000)
-
-    dispatch(setIsLoading({isLoading: false}))
   }
 }
 
-export const persistMealAsync = (patchObj): Function => {
+export const persistMealAsync = (id, patchObj): Function => {
   return (dispatch: Function, getState: Function) => {
     dispatch(setIsSaving({isSaving: true}))
 
+    const patchObjWithId = Object.assign({}, patchObj, {id: id})
+    const fullPatchObj = Object.assign({}, {meal: patchObjWithId})
+
     setTimeout(() => {
-      fetch('/users', {
+      fetch(`http://localhost:3001/api/meals/${id}`, {
         method: 'PATCH',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(patchObj)
+        body: JSON.stringify(fullPatchObj)
       })
       .then((response) => response.json())
       .then((json) => {
-        dispatch(setInitialDataSync(json))
-
-        // set guests
-        const guests = json.guests
-        guests.forEach((guest) => {
-          dispatch({
-            type: 'ADD_GUEST',
-            payload: guest
-          })
-        })
+        setData(dispatch, json)
+        dispatch(setIsSaving({isSaving: false}))
       })
     }, 2000)
-
-    dispatch(setIsSaving({isSaving: false}))
   }
 }
 
-export const cancelChanges = (persistedData): Function => {
+export const cancelChanges = (): Function => {
   return (dispatch: Function, getState: Function) => {
-    dispatch(setInitialDataSync(persistedData))
-
-    // set guests
-    const guests = persistedData.guests
-    guests.forEach((guest) => {
-      dispatch({
-        type: 'ADD_GUEST',
-        payload: guest
-      })
-    })
+    const persistedData = getState().persistedData
+    setData(dispatch, persistedData)
   }
-}
-
-export const actions = {
-  setInitialDataSync,
-  setCurrentTime,
-  fetchMealAsync,
-  persistMealAsync,
-  cancelChanges
 }
 
 // ------------------------------------
@@ -158,9 +155,9 @@ const initialState: AppSchema = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  ['SET_IS_LOADING']: (state: AppSchema, action): AppSchema => Object.assign({}, state, action.payload),
-  ['SET_IS_SAVING']: (state: AppSchema, action): AppSchema => Object.assign({}, state, action.payload),
-  ['SET_CURRENT_TIME']: (state: AppSchema, action): AppSchema => Object.assign({}, state, {currentTime: Date.now()})
+  'SET_IS_LOADING': (state: AppSchema, action): AppSchema => Object.assign({}, state, action.payload),
+  'SET_IS_SAVING': (state: AppSchema, action): AppSchema => Object.assign({}, state, action.payload),
+  'SET_CURRENT_TIME': (state: AppSchema, action): AppSchema => Object.assign({}, state, {currentTime: Date.now()})
 }
 
 // ------------------------------------

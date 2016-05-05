@@ -1,56 +1,29 @@
 /* @flow */
 // ------------------------------------
-// Constants
-// ------------------------------------
-export const ADD_MEAL_RESIDENT = 'ADD_MEAL_RESIDENT'
-export const REMOVE_MEAL_RESIDENT = 'REMOVE_MEAL_RESIDENT'
-export const TOGGLE_MEAL_RESIDENT_VEG = 'TOGGLE_MEAL_RESIDENT_VEG'
-export const TOGGLE_LATE = 'TOGGLE_LATE'
-// ------------------------------------
 // Actions
 // ------------------------------------
-export const addMealResident = (payload: number): Action => ({
-  type: ADD_MEAL_RESIDENT,
+export const addMealResident = (payload: Object): Action => ({
+  type: 'ADD_MEAL_RESIDENT',
   payload: payload
 })
 
-export const removeMealResident = (payload: number): Action => ({
-  type: REMOVE_MEAL_RESIDENT,
+type RemoveMealResidentPayload = {resident_id: number};
+export const removeMealResident = (payload: RemoveMealResidentPayload): Action => ({
+  type: 'REMOVE_MEAL_RESIDENT',
   payload: payload
 })
 
-export const toggleMealResidentVeg = (payload: id): Action => ({
-  type: TOGGLE_MEAL_RESIDENT_VEG,
+type ToggleMealResidentVegPayload = {resident_id: number};
+export const toggleMealResidentVeg = (payload: ToggleMealResidentVegPayload): Action => ({
+  type: 'TOGGLE_MEAL_RESIDENT_VEG',
   payload: payload
 })
 
-export const toggleLate = (payload: id): Action => ({
-  type: TOGGLE_LATE,
+type ToggleLatePayload = {resident_id: number};
+export const toggleLate = (payload: ToggleLatePayload): Action => ({
+  type: 'TOGGLE_LATE',
   payload: payload
 })
-
-// This is a thunk, meaning it is a function that immediately
-// returns a function for lazy evaluation. It is incredibly useful for
-// creating async actions, especially when combined with redux-thunk!
-// NOTE: This is solely for demonstration purposes. In a real application,
-// you'd probably want to dispatch an action and let the
-// reducer take care of this logic.
-export const requestMealResidents = (): Function => {
-  return (dispatch: Function, getState: Function): Promise => {
-    return new Promise((resolve: Function): void => {
-      setTimeout(() => {
-        resolve()
-      }, 10)
-    })
-  }
-}
-
-export const actions = {
-  addMealResident,
-  removeMealResident,
-  toggleMealResidentVeg,
-  toggleLate
-}
 
 // ------------------------------------
 // Model
@@ -69,34 +42,35 @@ const initialState: MealResidentsSchema = []
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ADD_MEAL_RESIDENT]: (state: MealResidentsSchema, action): MealResidentsSchema => {
+  'ADD_MEAL_RESIDENT': (state: MealResidentsSchema, action): MealResidentsSchema => {
     return [
       ...state,
       {resident_id: action.payload.resident_id, vegetarian: action.payload.vegetarian, late: false}
     ]
   },
-  [REMOVE_MEAL_RESIDENT]: (state: MealResidentsSchema, action): MealResidentsSchema =>
-    state.filter((meal_resident) => meal_resident.resident_id !== action.payload.resident_id),
-  [TOGGLE_MEAL_RESIDENT_VEG]: (state: MealResidentsSchema, action): MealResidentsSchema => {
-    return state.map((meal_resident) => {
-      if (meal_resident.resident_id !== action.payload.resident_id) {
-        return meal_resident
+  'REMOVE_MEAL_RESIDENT': (state: MealResidentsSchema, action): MealResidentsSchema =>
+    state.filter((mealResident) => mealResident.resident_id !== action.payload.resident_id),
+  'TOGGLE_MEAL_RESIDENT_VEG': (state: MealResidentsSchema, action): MealResidentsSchema => {
+    return state.map((mealResident) => {
+      if (mealResident.resident_id !== action.payload.resident_id) {
+        return mealResident
       } else {
-        return Object.assign({}, meal_resident, {vegetarian: !meal_resident.vegetarian})
+        return Object.assign({}, mealResident, {vegetarian: !mealResident.vegetarian})
       }
     })
   },
-  [TOGGLE_LATE]: (state: MealResidentsSchema, action): MealResidentsSchema => {
-    return state.map((meal_resident) => {
-      if (meal_resident.resident_id !== action.payload.resident_id) {
-        return meal_resident
+  'TOGGLE_LATE': (state: MealResidentsSchema, action): MealResidentsSchema => {
+    return state.map((mealResident) => {
+      if (mealResident.resident_id !== action.payload.resident_id) {
+        return mealResident
       } else {
-        return Object.assign({}, meal_resident, {late: !meal_resident.late})
+        return Object.assign({}, mealResident, {late: !mealResident.late})
       }
     })
   },
-  ['SET_INITIAL_DATA_SYNC']: (state: MealResidentsSchema, action): MealResidentsSchema =>
-    Object.assign([], action.payload.meal_residents)
+  'REPLACE_MEAL_RESIDENTS': (state: MealResidentsSchema, action): MealResidentsSchema =>
+    Object.assign([], action.payload),
+  'RESET_STATE': (state: MealResidentsSchema, action): MealResidentsSchema => Object.assign([], initialState)
 }
 
 // ------------------------------------

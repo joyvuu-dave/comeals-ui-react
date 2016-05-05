@@ -1,5 +1,25 @@
 /* @flow */
 // Schemas
+type MealSchema = {
+  id: number,
+  description: string,
+  date: string,
+  epoch: number,
+  max: number,
+  auto_close: boolean,
+  closed: boolean,
+  reconciled: boolean,
+  prevId: number,
+  nextId: number
+};
+
+type ResidentSchema = {
+  id: number,
+  name: string,
+  unit: string,
+  vegetarian: boolean
+};
+
 type BillSchema = {
   id: number,
   resident_id: number,
@@ -21,29 +41,37 @@ type GuestSchema = {
 };
 
 type PersistedDataSchema = {
-  description: string,
-  max: number,
-  auto_close: boolean,
-  closed: boolean,
+  meal: MealSchema,
+  residents: Array<ResidentSchema>,
   bills: Array<BillSchema>,
   meal_residents: Array<MealResidentSchema>,
   guests: Array<GuestSchema>
 };
 
 // Initial State
-const initialState = {}
+const initialState = {
+  meal: {
+    id: null,
+    description: '',
+    date: '',
+    epoch: null,
+    max: null,
+    auto_close: false,
+    closed_in_database: false,
+    reconciled: false,
+    prevId: '',
+    nextId: ''
+  },
+  residents: [],
+  bills: [],
+  meal_residents: [],
+  guests: []
+}
 
 const ACTION_HANDLERS = {
-  ['SET_INITIAL_DATA_SYNC']: (state: PersistedDataSchema, action) =>
-    Object.assign({}, {
-      auto_close: action.payload.auto_close,
-      bills: action.payload.bills,
-      closed_in_database: action.payload.closed_in_database,
-      description: action.payload.description,
-      guests: action.payload.guests,
-      max: action.payload.max,
-      meal_residents: action.payload.meal_residents
-    })
+  'RESET_STATE': (state: PersistedDataSchema, action): PersistedDataSchema => Object.assign({}, initialState),
+  'REPLACE_PERSISTED_DATA': (state: PersistedDataSchema, action): PersistedDataSchema =>
+    Object.assign({}, action.payload)
 }
 
 export default function persistedDataReducer (state = initialState, action) {

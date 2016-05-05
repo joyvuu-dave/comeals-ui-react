@@ -10,7 +10,7 @@ BigCalendar.setLocalizer(
 
 function Event ({ event }) {
   return (
-    <Link to={event.url}>
+    <Link style={{textDecoration: 'none', color: 'inherit'}} to={event.url}>
       <div style={{'fontSize': '0.75em'}}>{event.header}</div>
       <div style={{'fontSize': '0.75em'}}>{event.body}</div>
     </Link>
@@ -38,25 +38,7 @@ class CalendarView extends React.Component {
         end: new Date(event.end),
         url: event.url
       }))
-      this.setState({events: this.state.events.concat(meals)})
-    })
-    .catch(() => {
-      console.error('Failed to load meals!')
-    })
-
-    fetch('http://localhost:3001/api/bills')
-    .then((response) => response.json())
-    .then((json) => {
-      const bills = json.map((event) => Object.assign({}, {
-        title: event.title,
-        header: event.header,
-        body: event.body,
-        allDay: false,
-        start: new Date(event.start),
-        end: new Date(event.end),
-        url: event.url
-      }))
-      this.setState({events: this.state.events.concat(bills)})
+      this.setState({events: meals})
     })
     .catch(() => {
       console.error('Failed to load meals!')
@@ -66,7 +48,7 @@ class CalendarView extends React.Component {
   render () {
     return (
       <BigCalendar
-        style={{height: '1200px'}}
+        style={{width: 900, height: 700, marginLeft: 'auto', marginRight: 'auto'}}
         views={['month']}
         events={this.state.events}
         defaultDate={new Date()}

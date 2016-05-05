@@ -4,33 +4,6 @@ import { connect } from 'react-redux'
 import classes from './MealView.scss'
 import { createSelector } from 'reselect'
 import _ from 'lodash'
-import { normalize, Schema, arrayOf } from 'normalizr'
-
-// Normalizr
-const meal = new Schema('meals')    // many: residents, bills, meal_residents, and guests
-const resident = new Schema('residents')
-const bill = new Schema('bills')                    // 1 meal (implied), 1 resident
-const meal_resident = new Schema('meal_residents')  // 1 meal (implied), 1 resident
-const guest = new Schema('guests')                  // 1 meal (implied), 1 resident
-
-meal.define({
-  residents: arrayOf(resident),
-  bills: arrayOf(bill),
-  meal_residents: arrayOf(meal_resident),
-  guests: arrayOf(guest)
-})
-
-bill.define({
-  resident: resident
-})
-
-meal_resident.define({
-  resident: resident
-})
-
-guest.define({
-  resident: resident
-})
 
 // Actions
 import { setCurrentTime, fetchMealAsync, persistMealAsync, cancelChanges } from '../../redux/modules/App'
@@ -59,32 +32,39 @@ import Guests from '../../components/Guests/Guests'
 import GuestModal from '../../components/GuestModal/GuestModal'
 
 // Schemas
-import type { MealSchema } from '../../redux/modules/Meal'
-import type { ResidentsSchema } from '../../redux/modules/Residents'
-import type { MealResidentsSchema } from '../../redux/modules/MealResidents'
-import type { BillsSchema } from '../../redux/modules/bills'
-import type { GuestsSchema } from '../../redux/modules/Guests'
-import type { ActionsSchema } from '../../redux/modules/actions'
-import type { UISchema } from '../../redux/modules/UI'
-import type { GuestModalSchema } from '../../redux/modules/GuestModal'
+import type {
+  ActionsSchema,
+  BillsSchema,
+  GuestModalSchema,
+  GuestsSchema,
+  MealResidentsSchema,
+  MealSchema,
+  ResidentsSchema,
+  UISchema
+} from '../../redux/modules/schema/schema'
 
 type Props = {
   data: {
     meal: MealSchema,
     bills: BillsSchema,
     residents: ResidentsSchema,
-    meal_residents: MealResidentsSchema,
+    mealResidents: MealResidentsSchema,
     guests: GuestsSchema,
-    guest_modal: GuestModalSchema
+    guestModal: GuestModalSchema
   },
   actions: ActionsSchema,
   ui: UISchema
 };
 
 export class HomeView extends React.Component<void, Props, void> {
+  constructor () {
+    super()
+    this.handlePatch = this.handlePatch.bind(this)
+  }
+
   componentDidMount () {
     this.props.actions.app.fetchMealAsync(this.props.params.id)
-    //setInterval(this.props.actions.app.setCurrentTime, 60000)
+    // setInterval(this.props.actions.app.setCurrentTime, 60000)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -93,22 +73,25 @@ export class HomeView extends React.Component<void, Props, void> {
     }
   }
 
+  handlePatch () {
+    this.props.actions.app.persistMealAsync(this.props.data.meal.id, this.props.meta.patchObj)
+  }
+
   render () {
     return (
       <main className={classes.main}>
         <section className={classes.top}>
           <section className={classes['date-and-menu']}>
             <DateBox
-              meal_id={this.props.data.meal.id}
               date={this.props.data.meal.date}
               prevId={this.props.data.meal.prevId}
               nextId={this.props.data.meal.nextId}
               status={this.props.data.meal.status}
-              ui={this.props.ui.save_button}
-              persistMealAsync={this.props.actions.app.persistMealAsync}
-              cancelChanges={this.props.actions.app.cancelChanges}
-              data_has_changed={this.props.meta.data_has_changed}
-              current_data={this.props.meta.current_data} />
+              save_button_ui={this.props.ui.save_button}
+              cancel_button_ui={this.props.ui.cancel_button}
+              links_ui={this.props.ui.links}
+              persistMealAsync={this.handlePatch}
+              cancelChanges={this.props.actions.app.cancelChanges} />
             <Menu
               disabled={this.props.ui.menu.textarea_disabled}
               description={this.props.data.meal.description}
@@ -150,12 +133,12 @@ export class HomeView extends React.Component<void, Props, void> {
         <section className={classes.middle}>
           <Attendees
             ui={this.props.ui.attendees}
-            actions={this.props.actions.meal_residents}
+            actions={this.props.actions.mealResidents}
             residents={this.props.data.residents}
-            meal_residents={this.props.data.meal_residents} />
+            mealResidents={this.props.data.mealResidents} />
           <GuestModal
-            data={this.props.data.guest_modal}
-            actions={this.props.actions.guest_modal} />
+            data={this.props.data.guestModal}
+            actions={this.props.actions.guestModal} />
           <Guests
             ui={this.props.ui.guests}
             actions={this.props.actions.guests}
@@ -170,11 +153,12 @@ export class HomeView extends React.Component<void, Props, void> {
 /*
 meal.closed
 */
-const fourty_eight_hours = 48 * 60 * 60 * 1000
+const fourtyEightHours = 48 * 60 * 60 * 1000
 
 // App
 const getCurrentTime = (state) => state.app.currentTime
-const getHasLoaded = (state) => state.app.hasLoaded
+const getIsLoading = (state) => state.app.isLoading
+const getIsSaving = (state) => state.app.isSaving
 
 // Meal
 export const getReconciled = (state) => state.meal.reconciled
@@ -184,15 +168,15 @@ const getShouldAutoClose = (state) => state.meal.auto_close
 const getMax = (state) => state.meal.max
 
 // Meal Residents
-const getMealResidents = (state) => state.meal_residents
+const getMealResidents = (state) => state.mealResidents
 
 // Guests
 const getGuests = (state) => state.guests
 
 const getHasBeenAutoClosed = createSelector(
   [ getShouldAutoClose, getCurrentTime, getEpoch ],
-  (should_auto_close, currentTime, epoch) => {
-    return should_auto_close && currentTime + fourty_eight_hours >= epoch
+  (shouldAutoClose, currentTime, epoch) => {
+    return shouldAutoClose && currentTime + fourtyEightHours >= epoch
   }
 )
 
@@ -207,8 +191,8 @@ export const getPassed = createSelector(
 // meal.closed
 export const getClosed = createSelector(
   [ getClosedInDatabase, getHasBeenAutoClosed ],
-  (closed_in_database, has_been_auto_closed) => {
-    return closed_in_database || has_been_auto_closed
+  (closedInDataBase, hasBeenAutoClosed) => {
+    return closedInDataBase || hasBeenAutoClosed
   }
 )
 
@@ -222,9 +206,9 @@ export const getOpen = createSelector(
 
 // meal.status
 export const getMealStatus = createSelector(
-  [ getHasLoaded, getReconciled, getPassed, getClosed ],
-  (hasLoaded, reconciled, passed, closed) => {
-    if (!hasLoaded) {
+  [ getIsLoading, getReconciled, getPassed, getClosed ],
+  (isLoading, reconciled, passed, closed) => {
+    if (isLoading) {
       return 'LOADING...'
     }
 
@@ -255,26 +239,26 @@ CLOSED:
 // meal.attendees (count)
 export const getAttendeesCount = createSelector(
   [ getMealResidents, getGuests ],
-  (meal_residents, guests) => {
-    return meal_residents.length + guests.length
+  (mealResidents, guests) => {
+    return mealResidents.length + guests.length
   }
 )
 
 // meal.vegetarians (count)
 export const getVegetarians = createSelector(
   [ getMealResidents, getGuests ],
-  (meal_residents, guests) => {
-    let meal_resident_veg_count = 0
-    if (meal_residents.length > 0) {
-      meal_resident_veg_count = meal_residents.filter((meal_resident) => meal_resident.vegetarian).length
+  (mealResidents, guests) => {
+    let mealResidentVegCount = 0
+    if (mealResidents.length > 0) {
+      mealResidentVegCount = mealResidents.filter((mealResident) => mealResident.vegetarian).length
     }
 
-    let guest_veg_count = 0
+    let guestVegCount = 0
     if (guests.length > 0) {
-      guest_veg_count = guests.filter((guest) => guest.vegetarian).length
+      guestVegCount = guests.filter((guest) => guest.vegetarian).length
     }
 
-    return meal_resident_veg_count + guest_veg_count
+    return mealResidentVegCount + guestVegCount
   }
 )
 
@@ -289,13 +273,13 @@ export const getOmnivores = createSelector(
 // meal.late (count)
 export const getLate = createSelector(
   [ getMealResidents ],
-  (meal_residents) => {
-    let meal_resident_late_count = 0
-    if (meal_residents.length > 0) {
-      meal_resident_late_count = meal_residents.filter((meal_resident) => meal_resident.late).length
+  (mealResidents) => {
+    let mealResidentLateCount = 0
+    if (mealResidents.length > 0) {
+      mealResidentLateCount = mealResidents.filter((mealResident) => mealResident.late).length
     }
 
-    return meal_resident_late_count
+    return mealResidentLateCount
   }
 )
 
@@ -310,46 +294,43 @@ export const getExtras = createSelector(
 /*
 UI
 */
-// app.is_fetching
-export const getIsFetching = (state) => state.app.isFetching
-
 // Menu
 // ui.menu.textarea_disabled
-export const get_menu_textarea_disabled = createSelector(
-  [ getOpen, getIsFetching ],
-  (open, isFetching) => {
-    return !open || isFetching
+export const getMenuTextareaDisabled = createSelector(
+  [ getOpen, getIsLoading, getIsSaving ],
+  (open, isLoading, isSaving) => {
+    return !open || isLoading || isSaving
   }
 )
 
 // Bills
 // (TODO: create selector --> ui.bills.disabled)
-export const get_cook_select_disabled = createSelector(
-  [ getReconciled, getIsFetching ],
-  (reconciled, isFetching) => {
-    return reconciled || isFetching
+export const getCookSelectDisabled = createSelector(
+  [ getReconciled, getIsLoading, getIsSaving ],
+  (reconciled, isLoading, isSaving) => {
+    return reconciled || isLoading || isSaving
   }
 )
 
-export const get_cost_input_disabled = createSelector(
-  [ getReconciled, getIsFetching ],
-  (reconciled, isFetching) => {
-    return reconciled || isFetching
+export const getCostInputDisabled = createSelector(
+  [ getReconciled, getIsLoading, getIsSaving ],
+  (reconciled, isLoading, isSaving) => {
+    return reconciled || isLoading || isSaving
   }
 )
 
 // Extras Input
 // ui.extras.input_disabled
-export const get_extras_input_disabled = createSelector(
-  [ getMealStatus, getIsFetching ],
-  (mealStatus, isFetching) => {
-    return mealStatus !== 'CLOSED' || isFetching
+export const getExtrasInputDisabled = createSelector(
+  [ getMealStatus, getIsLoading, getIsSaving ],
+  (mealStatus, isLoading, isSaving) => {
+    return mealStatus !== 'CLOSED' || isLoading || isSaving
   }
 )
 
 // ui.extras.input_value
-export const get_extras_input_value = createSelector(
-  [ getExtras, get_extras_input_disabled ],
+export const getExtrasInputValue = createSelector(
+  [ getExtras, getExtrasInputDisabled ],
   (extras, disabled) => {
     if (disabled) return 'n/a'
     if (extras === 0) return ''
@@ -358,111 +339,106 @@ export const get_extras_input_value = createSelector(
 )
 
 // Close Button
-export const get_close_button_disabled = createSelector(
-  [ getIsFetching ],
-  (isFetching) => {
-    return isFetching
+export const getCloseButtonDisabled = createSelector(
+  [ getIsLoading, getIsSaving ],
+  (isLoading, isSaving) => {
+    return isLoading || isSaving
   }
 )
 
-export const get_close_button_hidden = createSelector(
+export const getCloseButtonHidden = createSelector(
   [ getOpen, getCurrentTime, getEpoch ],
   (open, currentTime, epoch) => {
-    return !open || (epoch - currentTime > fourty_eight_hours)
+    return !open || (epoch - currentTime > fourtyEightHours)
   }
 )
 
 // Auto-Close Checkbox
-export const get_auto_close_checkbox_disabled = createSelector(
-  [ getIsFetching ],
-  (isFetching) => {
-    return isFetching
+export const getAutoCloseCheckboxDisabled = createSelector(
+  [ getIsLoading, getIsSaving ],
+  (isLoading, isSaving) => {
+    return isLoading || isSaving
   }
 )
 
-export const get_auto_close_checkbox_hidden = createSelector(
+export const getAutoCloseCheckboxHidden = createSelector(
   [ getOpen, getEpoch, getCurrentTime ],
   (open, epoch, currentTime) => {
-    return !open || (epoch - currentTime) < fourty_eight_hours
+    return !open || (epoch - currentTime) < fourtyEightHours
   }
 )
 
 // Attendees
-export const get_checked_attendance_checkbox_disabled = createSelector(
-  [ getOpen, getIsFetching ],
-  (open, isFetching) => {
-    return !open || isFetching
+export const getCheckedAttendanceCheckboxDisabled = createSelector(
+  [ getOpen, getIsLoading, getIsSaving ],
+  (open, isLoading, isSaving) => {
+    return !open || isLoading || isSaving
   }
 )
 
-export const get_unchecked_attendance_checkbox_disabled = createSelector(
-  [ getIsFetching, getReconciled, getPassed, getClosed, getExtras ],
-  (isFetching, reconciled, passed, closed, extras) => {
-    return isFetching || reconciled || passed || (closed && extras === 0)
+export const getUncheckedAttendanceCheckboxDisabled = createSelector(
+  [ getIsLoading, getIsSaving, getReconciled, getPassed, getClosed, getExtras ],
+  (isLoading, isSaving, reconciled, passed, closed, extras) => {
+    return isLoading || isSaving || reconciled || passed || (closed && extras === 0)
   }
 )
 
-export const get_attendee_veg_checkbox_disabled = createSelector(
-  [ getOpen, getIsFetching ],
-  (open, isFetching) => {
-    return !open || isFetching
+export const getAttendeeVegCheckboxDisabled = createSelector(
+  [ getOpen, getIsLoading, getIsSaving ],
+  (open, isLoading, isSaving) => {
+    return !open || isLoading || isSaving
   }
 )
 
-export const get_attendee_late_checkbox_disabled = createSelector(
-  [ getPassed, getReconciled, getIsFetching ],
-  (passed, reconciled, isFetching) => {
-    return passed || reconciled || isFetching
+export const getAttendeeLateCheckboxDisabled = createSelector(
+  [ getPassed, getReconciled, getIsLoading, getIsSaving ],
+  (passed, reconciled, isLoading, isSaving) => {
+    return passed || reconciled || isLoading || isSaving
   }
 )
 
 // Guests
-export const get_add_guest_button_disabled = createSelector(
-  [ getIsFetching, getReconciled, getPassed, getClosed, getExtras ],
-  (isFetching, reconciled, passed, closed, extras) => {
-    return isFetching || reconciled || passed || (closed && extras === 0)
+export const getAddGuestButtonDisabled = createSelector(
+  [ getIsLoading, getIsSaving, getReconciled, getPassed, getClosed, getExtras ],
+  (isLoading, isSaving, reconciled, passed, closed, extras) => {
+    return isLoading || isSaving || reconciled || passed || (closed && extras === 0)
   }
 )
 
-export const get_guest_veg_checkbox_disabled = createSelector(
-  [ getOpen, getIsFetching ],
-  (open, isFetching) => {
-    return !open || isFetching
+export const getGuestVegCheckboxDisabled = createSelector(
+  [ getOpen, getIsLoading, getIsSaving ],
+  (open, isLoading, isSaving) => {
+    return !open || isLoading || isSaving
   }
 )
 
-export const get_remove_guest_button_disabled = createSelector(
-  [ getOpen, getIsFetching ],
-  (open, isFetching) => {
-    return !open || isFetching
+export const getRemoveGuestButtonDisabled = createSelector(
+  [ getOpen, getIsLoading, getIsSaving ],
+  (open, isLoading, isSaving) => {
+    return !open || isLoading || isSaving
   }
 )
 
 // Save Button
-export const get_save_button_disabled = createSelector(
-  [ getIsFetching ],
-  (isFetching) => {
-    return isFetching
+export const getSaveButtonDisabled = createSelector(
+  [ getIsLoading, getIsSaving ],
+  (isLoading, isSaving) => {
+    return isLoading || isSaving
   }
 )
 
-export const getIsSaving = (state) => state.app.isSaving
-export const get_save_button_value = createSelector(
+export const getSaveButtonValue = createSelector(
   [ getIsSaving ],
   (isSaving) => {
     return isSaving ? 'Saving...' : 'Save'
   }
 )
 
-/*
-TEMP: APP IS DIRTY
-*/
-
 // description
-export const getPersistedDescription = (state) => state.persisted_data.description
+export const getPersistedDescription = (state) => state.persistedData.meal.description
 export const getCurrentDescription = (state) => state.meal.description
 
-export const get_description_has_changed = createSelector(
+export const getDescriptionHasChanged = createSelector(
   [ getPersistedDescription, getCurrentDescription ],
   (persistedDescription, currentDescription) => {
     return persistedDescription !== currentDescription
@@ -470,8 +446,8 @@ export const get_description_has_changed = createSelector(
 )
 
 // max
-export const getPersistedMax = (state) => state.persisted_data.max
-export const get_max_has_changed = createSelector(
+export const getPersistedMax = (state) => state.persistedData.meal.max
+export const getMaxHasChanged = createSelector(
   [ getPersistedMax, getMax ],
   (persistedMax, max) => {
     return persistedMax !== max
@@ -479,20 +455,20 @@ export const get_max_has_changed = createSelector(
 )
 
 // auto-close
-export const getPersistedAutoClose = (state) => state.persisted_data.auto_close
-export const get_auto_close_has_changed = createSelector(
+export const getPersistedAutoClose = (state) => state.persistedData.meal.auto_close
+export const getAutoCloseHasChanged = createSelector(
   [ getPersistedAutoClose, getShouldAutoClose ],
-  (persistedAutoClose, should_auto_close) => {
-    return persistedAutoClose !== should_auto_close
+  (persistedAutoClose, shouldAutoClose) => {
+    return persistedAutoClose !== shouldAutoClose
   }
 )
 
 // closed
-export const getPersistedClosed = (state) => state.persisted_data.closed_in_database
-export const get_closed_has_changed = createSelector(
+export const getPersistedClosed = (state) => state.persistedData.meal.closed_in_database
+export const getClosedHasChanged = createSelector(
   [ getPersistedClosed, getClosedInDatabase ],
-  (persistedClose, closed_in_database) => {
-    return persistedClose !== closed_in_database
+  (persistedClose, closedInDatabase) => {
+    return persistedClose !== closedInDatabase
   }
 )
 
@@ -500,30 +476,30 @@ export const get_closed_has_changed = createSelector(
 export const getBill1 = (state) => state.bill1
 export const getBill2 = (state) => state.bill2
 export const getBill3 = (state) => state.bill3
-export const get_current_bills = createSelector(
+export const getCurrentBills = createSelector(
   [ getBill1, getBill2, getBill3 ],
   (bill1, bill2, bill3) => {
     return [bill1, bill2, bill3]
   }
 )
 
-export const getPersistedBills = (state) => state.persisted_data.bills
+export const getPersistedBills = (state) => state.persistedData.bills
 
 // meal-residents
-export const getPersistedMealResidents = (state) => state.persisted_data.meal_residents
-export const getCurrentMealResidents = (state) => state.meal_residents
+export const getPersistedMealResidents = (state) => state.persistedData.meal_residents
+export const getCurrentMealResidents = (state) => state.mealResidents
 
 // guests
-export const getPersistedGuests = (state) => state.persisted_data.guests
+export const getPersistedGuests = (state) => state.persistedData.guests
 export const getCurrentGuests = (state) => state.guests
 
 // currentData
 export const getCurrentData = createSelector(
   [ getCurrentDescription, getMax, getShouldAutoClose,
-    getClosed, get_current_bills, getCurrentMealResidents,
+    getClosed, getCurrentBills, getCurrentMealResidents,
     getCurrentGuests ],
   (description, max, autoClose,
-   closed, bills, meal_residents,
+   closed, bills, mealResidents,
    guests) => {
     return {
       auto_close: autoClose,
@@ -532,7 +508,7 @@ export const getCurrentData = createSelector(
       description: description,
       guests: guests,
       max: max,
-      meal_residents: meal_residents
+      mealResidents: mealResidents
     }
   }
 )
@@ -544,16 +520,15 @@ export const getResidents = (state) => state.residents
 export const getAttendeePatchObj = createSelector(
   [ getResidents, getPersistedMealResidents, getCurrentMealResidents ],
   (residents, persistedMealResidents, currentMealResidents) => {
-    let residents_temp = residents || []
-    let persistedMealResidents_temp = persistedMealResidents || []
-    let currentMealResidents_temp = currentMealResidents || []
+    let residentsArray = residents || []
+    let persistedMealResidentsArray = persistedMealResidents || []
+    let currentMealResidentsArray = currentMealResidents || []
 
-    const residentIds = residents_temp.map((r) => r.id)
-    const persistedResidentIds = persistedMealResidents_temp.map((p) => p.resident_id)
-    const currentResidentIds = currentMealResidents_temp.map((c) => c.resident_id)
+    const persistedResidentIds = persistedMealResidentsArray.map((p) => p.resident_id)
+    const currentResidentIds = currentMealResidentsArray.map((c) => c.resident_id)
 
     let arr = []
-    residents_temp.forEach((resident) => {
+    residentsArray.forEach((resident) => {
       let currentIndex = currentResidentIds.indexOf(resident.id)
       let persistedIndex = persistedResidentIds.indexOf(resident.id)
 
@@ -568,13 +543,13 @@ export const getAttendeePatchObj = createSelector(
 
       // case 2: exists in persisted but not current - delete
       if (existsInPersisted && !existsInCurrent) {
-        arr.push({id: persistedMealResidents_temp[persistedIndex].id, _delete: true})
+        arr.push({id: persistedMealResidentsArray[persistedIndex].id, _destroy: true})
         return
       }
 
       // case 3: exists in persisted and current but is different - update
-      let current = currentMealResidents_temp[currentIndex]
-      let persisted = persistedMealResidents_temp[persistedIndex]
+      let current = currentMealResidentsArray[currentIndex]
+      let persisted = persistedMealResidentsArray[persistedIndex]
 
       if (existsInPersisted && existsInCurrent) {
         let vegChanged = !_.isEqual(current.vegetarian, persisted.vegetarian)
@@ -604,15 +579,15 @@ export const getAttendeePatchObj = createSelector(
 )
 
 const getBillsPatchObj = createSelector(
-  [ getPersistedBills, get_current_bills ],
+  [ getPersistedBills, getCurrentBills ],
   (persistedBills, currentBills) => {
     let patchObj = []
 
     _.forEach(currentBills, (bill, index) => {
-      if (bill.id !== "") {
+      if (bill.id !== '') {
         if (bill.resident_id === -1) {
           // DELETE bill
-          patchObj.push({id: bill.id, _delete: true})
+          patchObj.push({id: bill.id, _destroy: true})
         } else {
           const differentResident = bill.resident_id !== persistedBills[index].resident_id
           const differentAmount = bill.amount !== persistedBills[index].amount
@@ -648,7 +623,7 @@ const getGuestsPatchObj = createSelector(
 
     // If a current guest record has an ID, then it is also persisted
     // This array contains only current guests
-    const persistedAndCurrent = currentGuests.filter((guest) => guest.id !== undefined)
+    const persistedAndCurrent = currentGuestsArray.filter((guest) => guest.id !== undefined)
 
     // A record is only persisted if there is no matching record in the current array
     const ids = persistedAndCurrent.map((guest) => guest.id)
@@ -661,7 +636,7 @@ const getGuestsPatchObj = createSelector(
 
     // DELETE
     _.each(justPersisted, (guest) => {
-      patchObj.push({id: guest.id, _delete: true})
+      patchObj.push({id: guest.id, _destroy: true})
     })
 
     // CREATE
@@ -685,24 +660,19 @@ const getGuestsPatchObj = createSelector(
   }
 )
 
+const getMealId = (state) => state.meal.id
 const getPatchObj = createSelector(
-  [ get_auto_close_has_changed, getShouldAutoClose, getBillsPatchObj,
-    get_closed_has_changed, getClosedInDatabase, get_description_has_changed, getCurrentDescription,
-    getGuestsPatchObj, get_max_has_changed, getMax, getAttendeePatchObj ],
-  ( autoCloseHasChanged, current_auto_close, billsPatchObj,
+  [ getMealId, getAutoCloseHasChanged, getShouldAutoClose, getBillsPatchObj,
+    getClosedHasChanged, getClosedInDatabase, getDescriptionHasChanged, getCurrentDescription,
+    getGuestsPatchObj, getMaxHasChanged, getMax, getAttendeePatchObj ],
+  (mealId, autoCloseHasChanged, currentAutoClose, billsPatchObj,
     closedHasChanged, closedInDatabase, descriptionHasChanged, currentDescription,
     guestsPatchObj, maxHasChanged, max, attendeePatchObj) => {
-
     let patchObj = {}
 
     // auto_close
     if (autoCloseHasChanged) {
-      patchObj.auto_close = current_auto_close
-    }
-
-    // bills
-    if (billsPatchObj.length > 0) {
-      patchObj.bills = billsPatchObj
+      patchObj.auto_close = currentAutoClose
     }
 
     // closed_in_database
@@ -715,19 +685,24 @@ const getPatchObj = createSelector(
       patchObj.description = currentDescription
     }
 
-    // guests
-    if (guestsPatchObj.length > 0) {
-      patchObj.guests = guestsPatchObj
-    }
-
     // max
     if (maxHasChanged) {
       patchObj.max = max
     }
 
+    // bills
+    if (billsPatchObj.length > 0) {
+      patchObj.bills_attributes = billsPatchObj
+    }
+
+    // guests
+    if (guestsPatchObj.length > 0) {
+      patchObj.guests_attributes = guestsPatchObj
+    }
+
     // meal_residents (attendees)
     if (attendeePatchObj.length > 0) {
-      patchObj.meal_residents = attendeePatchObj
+      patchObj.meal_residents_attributes = attendeePatchObj
     }
 
     return patchObj
@@ -742,9 +717,9 @@ const getDataHasChanged = createSelector(
 )
 
 const getSaveButtonHidden = createSelector(
-  [ getDataHasChanged, getHasLoaded ],
-  (dataHasChanged, hasLoaded) => {
-    return !dataHasChanged || !hasLoaded
+  [ getDataHasChanged, getIsLoading ],
+  (dataHasChanged, isLoading) => {
+    return !dataHasChanged || isLoading
   }
 )
 
@@ -784,18 +759,46 @@ const getCook3ErrorMessage = createSelector(
   }
 )
 
+const getCancelButtonDisabled = createSelector(
+  [ getIsLoading, getIsSaving ],
+  (isLoading, isSaving) => {
+    return isLoading || isSaving
+  }
+)
+
+const getCancelButtonHidden = createSelector(
+  [ getDataHasChanged, getIsLoading ],
+  (dataHasChanged, isLoading) => {
+    return !dataHasChanged || isLoading
+  }
+)
+
+const getLinksDisabled = createSelector(
+  [ getIsSaving ],
+  (isSaving) => {
+    return isSaving
+  }
+)
+
+const getLinksHidden = createSelector(
+  [ getIsLoading ],
+  (isLoading) => {
+    return isLoading
+  }
+)
+
 const mapStateToProps = (state) => {
   return {
     app: state.app,
     meal: state.meal,
     residents: state.residents,
-    meal_residents: state.meal_residents,
+    mealResidents: state.mealResidents,
     bill1: state.bill1,
     bill2: state.bill2,
     bill3: state.bill3,
     guests: state.guests,
-    guest_modal: state.guest_modal,
-    persisted_data: state.persisted_data
+    guestModal: state.guestModal,
+    persistedData: state.persistedData
   }
 }
 
@@ -803,9 +806,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return Object.assign({}, ownProps,
     {
       meta: {
-        data_has_changed: getDataHasChanged(stateProps),
-        current_data: getCurrentData(stateProps),
-        patch_obj: getPatchObj(stateProps)
+        patchObj: getPatchObj(stateProps)
       },
       data: {
         meal: {
@@ -829,9 +830,9 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
           '3': stateProps.bill3
         },
         residents: stateProps.residents,
-        meal_residents: stateProps.meal_residents,
+        mealResidents: stateProps.mealResidents,
         guests: stateProps.guests,
-        guest_modal: stateProps.guest_modal
+        guestModal: stateProps.guestModal
       },
       actions: {
         app: {
@@ -860,7 +861,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
             updateCost: dispatchProps.updateCost3
           }
         },
-        meal_residents: {
+        mealResidents: {
           addMealResident: dispatchProps.addMealResident,
           removeMealResident: dispatchProps.removeMealResident,
           toggleVeg: dispatchProps.toggleMealResidentVeg,
@@ -872,7 +873,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
           toggleVeg: dispatchProps.toggleGuestVeg,
           toggleMultiplier: dispatchProps.toggleGuestMultiplier
         },
-        guest_modal: {
+        guestModal: {
           close: dispatchProps.closeGuestModal,
           toggleVeg: dispatchProps.toggleModalVeg,
           toggleMultiplier: dispatchProps.toggleModalMultiplier,
@@ -881,11 +882,11 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
       },
       ui: {
         menu: {
-          textarea_disabled: get_menu_textarea_disabled(stateProps)
+          textarea_disabled: getMenuTextareaDisabled(stateProps)
         },
         cooks: {
-          select_disabled: get_cook_select_disabled(stateProps),
-          input_disabled: get_cost_input_disabled(stateProps),
+          select_disabled: getCookSelectDisabled(stateProps),
+          input_disabled: getCostInputDisabled(stateProps),
           error_message: {
             '1': getCook1ErrorMessage(stateProps),
             '2': getCook2ErrorMessage(stateProps),
@@ -893,32 +894,40 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
           }
         },
         auto_close_checkbox: {
-          hidden: get_auto_close_checkbox_hidden(stateProps),
-          disabled: get_auto_close_checkbox_disabled(stateProps)
+          hidden: getAutoCloseCheckboxHidden(stateProps),
+          disabled: getAutoCloseCheckboxDisabled(stateProps)
         },
         extras: {
-          input_value: get_extras_input_value(stateProps),
-          input_disabled: get_extras_input_disabled(stateProps)
+          input_value: getExtrasInputValue(stateProps),
+          input_disabled: getExtrasInputDisabled(stateProps)
         },
         close_button: {
-          hidden: get_close_button_hidden(stateProps),
-          disabled: get_close_button_disabled(stateProps)
+          hidden: getCloseButtonHidden(stateProps),
+          disabled: getCloseButtonDisabled(stateProps)
         },
         attendees: {
-          checked_checkbox_disabled: get_checked_attendance_checkbox_disabled(stateProps),
-          unchecked_checkbox_disabled: get_unchecked_attendance_checkbox_disabled(stateProps),
-          veg_checkbox_disabled: get_attendee_veg_checkbox_disabled(stateProps),
-          late_checkbox_disabled: get_attendee_late_checkbox_disabled(stateProps),
-          add_guest_button_disabled: get_add_guest_button_disabled(stateProps)
+          checked_checkbox_disabled: getCheckedAttendanceCheckboxDisabled(stateProps),
+          unchecked_checkbox_disabled: getUncheckedAttendanceCheckboxDisabled(stateProps),
+          veg_checkbox_disabled: getAttendeeVegCheckboxDisabled(stateProps),
+          late_checkbox_disabled: getAttendeeLateCheckboxDisabled(stateProps),
+          add_guest_button_disabled: getAddGuestButtonDisabled(stateProps)
         },
         guests: {
-          veg_checkbox_disabled: get_guest_veg_checkbox_disabled(stateProps),
-          remove_button_disabled: get_remove_guest_button_disabled(stateProps)
+          veg_checkbox_disabled: getGuestVegCheckboxDisabled(stateProps),
+          remove_button_disabled: getRemoveGuestButtonDisabled(stateProps)
         },
         save_button: {
+          disabled: getSaveButtonDisabled(stateProps),
           hidden: getSaveButtonHidden(stateProps),
-          disabled: get_save_button_disabled(stateProps),
-          value: get_save_button_value(stateProps)
+          value: getSaveButtonValue(stateProps)
+        },
+        cancel_button: {
+          disabled: getCancelButtonDisabled(stateProps),
+          hidden: getCancelButtonHidden(stateProps)
+        },
+        links: {
+          disabled: getLinksDisabled(stateProps),
+          hidden: getLinksHidden(stateProps)
         }
       }
     }
