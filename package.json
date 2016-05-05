@@ -134,7 +134,7 @@
     "karma": "^0.13.21",
     "karma-coverage": "^1.0.0",
     "karma-mocha": "^1.0.1",
-    "karma-mocha-reporter": "^2.0.0",
+    "karma-mocha-reporter": "^2.0.3",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-webpack-with-fast-source-maps": "^1.9.2",
     "mocha": "^2.2.5",
@@ -159,6 +159,6 @@
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.6.0",
-    "yargs": "^4.0.0"
+    "yargs": "^4.7.0"
   }
 }
