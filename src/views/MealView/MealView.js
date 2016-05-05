@@ -44,6 +44,9 @@ import type {
 } from '../../redux/modules/schema/schema'
 
 type Props = {
+  meta: {
+    patchObj: Object
+  },
   data: {
     meal: MealSchema,
     bills: BillsSchema,

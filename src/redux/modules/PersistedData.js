@@ -69,7 +69,6 @@ const initialState = {
 }
 
 const ACTION_HANDLERS = {
-  'RESET_STATE': (state: PersistedDataSchema, action): PersistedDataSchema => Object.assign({}, initialState),
   'REPLACE_PERSISTED_DATA': (state: PersistedDataSchema, action): PersistedDataSchema =>
     Object.assign({}, action.payload)
 }

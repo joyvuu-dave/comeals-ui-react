@@ -56,8 +56,7 @@ const ACTION_HANDLERS = {
       }
     })
   },
-  'REPLACE_GUESTS': (state: GuestsSchema, action): GuestSchema => Object.assign([], action.payload),
-  'RESET_STATE': (state: GuestsSchema, action): GuestsSchema => Object.assign([], initialState)
+  'REPLACE_GUESTS': (state: GuestsSchema, action): GuestSchema => Object.assign([], action.payload)
 }
 
 // ------------------------------------

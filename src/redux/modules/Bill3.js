@@ -34,8 +34,7 @@ const initialState: BillSchema = {
 const ACTION_HANDLERS = {
   'UPDATE_COOK_3': (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
   'UPDATE_COST_3': (state: BillSchema, action): BillSchema => ({...state, ...action.payload}),
-  'REPLACE_BILL_3': (state: BillSchema, action): BillSchema => Object.assign({}, action.payload),
-  'RESET_STATE': (state: BillSchema, action): BillSchema => Object.assign({}, initialState)
+  'REPLACE_BILL_3': (state: BillSchema, action): BillSchema => Object.assign({}, action.payload)
 }
 
 // ------------------------------------

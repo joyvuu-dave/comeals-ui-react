@@ -61,8 +61,7 @@ const ACTION_HANDLERS = {
   'UPDATE_EXTRAS': (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
   'UPDATE_AUTO_CLOSE': (state: MealSchema, action): MealSchema => ({...state, ...action.payload}),
   'CLOSE_MEAL': (state: MealSchema, action): MealSchema => Object.assign({}, state, {closed_in_database: true}),
-  'REPLACE_MEAL': (state: MealSchema, action): MealSchema => Object.assign({}, action.payload),
-  'RESET_STATE': (state: MealSchema, action): MealSchema => Object.assign({}, initialState)
+  'REPLACE_MEAL': (state: MealSchema, action): MealSchema => Object.assign({}, action.payload)
 }
 
 // ------------------------------------

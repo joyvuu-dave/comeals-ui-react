@@ -46,8 +46,6 @@ export const setIsSaving = (payload): Action => ({
 })
 
 function setData (dispatch, data) {
-  // dispatch({type: 'RESET_STATE'})
-
   // persisted data
   // Fixme: currently this must happen before we can dipatch
   //        ADD_GUESTS or there will be an error due to

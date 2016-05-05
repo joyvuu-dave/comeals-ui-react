@@ -16,8 +16,7 @@ const initialState: ResidentsSchema = []
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  'REPLACE_RESIDENTS': (state: ResidentsSchema, action): ResidentsSchema => Object.assign([], action.payload),
-  'RESET_STATE': (state: ResidentsSchema, action): ResidentsSchema => Object.assign([], initialState)
+  'REPLACE_RESIDENTS': (state: ResidentsSchema, action): ResidentsSchema => Object.assign([], action.payload)
 }
 
 // ------------------------------------

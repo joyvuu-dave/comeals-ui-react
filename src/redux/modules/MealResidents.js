@@ -69,8 +69,7 @@ const ACTION_HANDLERS = {
     })
   },
   'REPLACE_MEAL_RESIDENTS': (state: MealResidentsSchema, action): MealResidentsSchema =>
-    Object.assign([], action.payload),
-  'RESET_STATE': (state: MealResidentsSchema, action): MealResidentsSchema => Object.assign([], initialState)
+    Object.assign([], action.payload)
 }
 
 // ------------------------------------
