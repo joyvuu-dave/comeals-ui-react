@@ -67,7 +67,7 @@ export class HomeView extends React.Component<void, Props, void> {
 
   componentDidMount () {
     this.props.actions.app.fetchMealAsync(this.props.params.id)
-    // setInterval(this.props.actions.app.setCurrentTime, 60000)
+    setInterval(this.props.actions.app.setCurrentTime, 60000)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -496,33 +496,17 @@ export const getCurrentMealResidents = (state) => state.mealResidents
 export const getPersistedGuests = (state) => state.persistedData.guests
 export const getCurrentGuests = (state) => state.guests
 
-// currentData
-export const getCurrentData = createSelector(
-  [ getCurrentDescription, getMax, getShouldAutoClose,
-    getClosed, getCurrentBills, getCurrentMealResidents,
-    getCurrentGuests ],
-  (description, max, autoClose,
-   closed, bills, mealResidents,
-   guests) => {
-    return {
-      auto_close: autoClose,
-      bills: bills,
-      closed_in_database: closed,
-      description: description,
-      guests: guests,
-      max: max,
-      mealResidents: mealResidents
-    }
-  }
-)
-
 /*
 CREATE PATCH OBJ
 */
 export const getResidents = (state) => state.residents
 export const getAttendeePatchObj = createSelector(
-  [ getResidents, getPersistedMealResidents, getCurrentMealResidents ],
-  (residents, persistedMealResidents, currentMealResidents) => {
+  [ getIsLoading, getIsSaving, getResidents, getPersistedMealResidents, getCurrentMealResidents ],
+  (isLoading, isSaving, residents, persistedMealResidents, currentMealResidents) => {
+    if (isLoading || isSaving) {
+      return []
+    }
+
     let residentsArray = residents || []
     let persistedMealResidentsArray = persistedMealResidents || []
     let currentMealResidentsArray = currentMealResidents || []
@@ -582,8 +566,15 @@ export const getAttendeePatchObj = createSelector(
 )
 
 const getBillsPatchObj = createSelector(
-  [ getPersistedBills, getCurrentBills ],
-  (persistedBills, currentBills) => {
+  [ getIsLoading, getIsSaving, getPersistedBills, getCurrentBills ],
+  (isLoading, isSaving, persistedBills, currentBills) => {
+    if (isLoading || isSaving) {
+      console.log('skipping!')
+      return []
+    } else {
+      console.log('not skipping!')
+    }
+
     let patchObj = []
 
     _.forEach(currentBills, (bill, index) => {
@@ -619,8 +610,12 @@ const getBillsPatchObj = createSelector(
 )
 
 const getGuestsPatchObj = createSelector(
-  [ getPersistedGuests, getCurrentGuests ],
-  (persistedGuests, currentGuests) => {
+  [ getIsLoading, getIsSaving, getPersistedGuests, getCurrentGuests ],
+  (isLoading, isSaving, persistedGuests, currentGuests) => {
+    if (isLoading || isSaving) {
+      return []
+    }
+
     const persistedGuestsArray = persistedGuests || []
     const currentGuestsArray = currentGuests || []
 
@@ -665,12 +660,16 @@ const getGuestsPatchObj = createSelector(
 
 const getMealId = (state) => state.meal.id
 const getPatchObj = createSelector(
-  [ getMealId, getAutoCloseHasChanged, getShouldAutoClose, getBillsPatchObj,
+  [ getIsLoading, getIsSaving, getMealId, getAutoCloseHasChanged, getShouldAutoClose, getBillsPatchObj,
     getClosedHasChanged, getClosedInDatabase, getDescriptionHasChanged, getCurrentDescription,
     getGuestsPatchObj, getMaxHasChanged, getMax, getAttendeePatchObj ],
-  (mealId, autoCloseHasChanged, currentAutoClose, billsPatchObj,
+  (isLoading, isSaving, mealId, autoCloseHasChanged, currentAutoClose, billsPatchObj,
     closedHasChanged, closedInDatabase, descriptionHasChanged, currentDescription,
     guestsPatchObj, maxHasChanged, max, attendeePatchObj) => {
+    if (isLoading || isSaving) {
+      return {}
+    }
+
     let patchObj = {}
 
     // auto_close

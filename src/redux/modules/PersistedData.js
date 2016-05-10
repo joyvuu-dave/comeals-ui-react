@@ -69,6 +69,36 @@ const initialState = {
 }
 
 const ACTION_HANDLERS = {
+  // 'REPLACE_PERSISTED_DATA': (state: PersistedDataSchema, action): PersistedDataSchema => {
+  //   let newState = Object.assign({}, initialState)
+
+  //   // meal
+  //   if (action.payload.meal) {
+  //     newState.meal = action.payload.meal
+  //   }
+
+  //   // residents
+  //   if (action.payload.residents) {
+  //     newState.meal = action.payload.residents
+  //   }
+
+  //   // bills
+  //   if (action.payload.bills) {
+  //     newState.bills = action.payload.bills
+  //   }
+
+  //   // meal_residents
+  //   if (action.payload.meal_residents) {
+  //     newState.meal_residents = action.payload.meal_residents
+  //   }
+
+  //   // guests
+  //   if (action.payload.guests) {
+  //     newState.guests = action.payload.guests
+  //   }
+
+  //   return newState
+  // }
   'REPLACE_PERSISTED_DATA': (state: PersistedDataSchema, action): PersistedDataSchema =>
     Object.assign({}, action.payload)
 }

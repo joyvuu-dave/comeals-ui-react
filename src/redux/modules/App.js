@@ -91,14 +91,12 @@ export const fetchMealAsync = (id): Function => {
   return (dispatch: Function, getState: Function) => {
     dispatch(setIsLoading({isLoading: true}))
 
-    setTimeout(() => {
-      fetch(`http://localhost:3001/api/meals/${id}`)
-      .then((response) => response.json())
-      .then((json) => {
-        setData(dispatch, json)
-        dispatch(setIsLoading({isLoading: false}))
-      })
-    }, 2000)
+    fetch(`http://localhost:3001/api/meals/${id}`)
+    .then((response) => response.json())
+    .then((json) => {
+      setData(dispatch, json)
+      dispatch(setIsLoading({isLoading: false}))
+    })
   }
 }
 
@@ -109,21 +107,19 @@ export const persistMealAsync = (id, patchObj): Function => {
     const patchObjWithId = Object.assign({}, patchObj, {id: id})
     const fullPatchObj = Object.assign({}, {meal: patchObjWithId})
 
-    setTimeout(() => {
-      fetch(`http://localhost:3001/api/meals/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(fullPatchObj)
-      })
-      .then((response) => response.json())
-      .then((json) => {
-        setData(dispatch, json)
-        dispatch(setIsSaving({isSaving: false}))
-      })
-    }, 2000)
+    fetch(`http://localhost:3001/api/meals/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(fullPatchObj)
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      setData(dispatch, json)
+      dispatch(setIsSaving({isSaving: false}))
+    })
   }
 }
 

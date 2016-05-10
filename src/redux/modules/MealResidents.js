@@ -29,6 +29,7 @@ export const toggleLate = (payload: ToggleLatePayload): Action => ({
 // Model
 // ------------------------------------
 export type MealResidentSchema = {
+  id: number,
   resident_id: number,
   vegetarian: boolean,
   late: boolean
