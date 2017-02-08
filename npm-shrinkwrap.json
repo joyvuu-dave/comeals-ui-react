@@ -1,0 +1,870 @@
+{
+  "name": "react-redux-starter-kit",
+  "version": "2.0.0-alpha.2",
+  "dependencies": {
+    "accepts": {
+      "version": "1.3.3",
+      "from": "accepts@>=1.2.2 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/accepts/1.3.3.tgz"
+    },
+    "ansi-regex": {
+      "version": "2.0.0",
+      "from": "ansi-regex@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/ansi-regex/2.0.0.tgz"
+    },
+    "ansi-styles": {
+      "version": "2.2.1",
+      "from": "ansi-styles@>=2.2.1 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/ansi-styles/2.2.1.tgz"
+    },
+    "any-promise": {
+      "version": "1.3.0",
+      "from": "any-promise@>=1.1.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/any-promise/1.3.0.tgz"
+    },
+    "asap": {
+      "version": "2.0.3",
+      "from": "asap@>=2.0.3 <2.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/asap/2.0.3.tgz"
+    },
+    "asn1": {
+      "version": "0.2.3",
+      "from": "asn1@>=0.2.3 <0.3.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/asn1/0.2.3.tgz"
+    },
+    "assert-plus": {
+      "version": "0.2.0",
+      "from": "assert-plus@>=0.2.0 <0.3.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/assert-plus/0.2.0.tgz"
+    },
+    "async": {
+      "version": "1.5.2",
+      "from": "async@>=1.5.2 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/async/1.5.2.tgz"
+    },
+    "aws-sign2": {
+      "version": "0.6.0",
+      "from": "aws-sign2@>=0.6.0 <0.7.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/aws-sign2/0.6.0.tgz"
+    },
+    "aws4": {
+      "version": "1.4.1",
+      "from": "aws4@>=1.2.1 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/aws4/1.4.1.tgz"
+    },
+    "bl": {
+      "version": "1.1.2",
+      "from": "bl@>=1.1.2 <1.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/bl/1.1.2.tgz"
+    },
+    "boom": {
+      "version": "2.10.1",
+      "from": "boom@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/boom/2.10.1.tgz"
+    },
+    "caseless": {
+      "version": "0.11.0",
+      "from": "caseless@>=0.11.0 <0.12.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/caseless/0.11.0.tgz"
+    },
+    "chalk": {
+      "version": "1.1.3",
+      "from": "chalk@>=1.1.1 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/chalk/1.1.3.tgz"
+    },
+    "classnames": {
+      "version": "2.2.5",
+      "from": "classnames@>=2.2.5 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/classnames/2.2.5.tgz"
+    },
+    "co": {
+      "version": "4.6.0",
+      "from": "co@>=4.6.0 <5.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/co/4.6.0.tgz"
+    },
+    "co-request": {
+      "version": "0.2.1",
+      "from": "co-request@>=0.2.0 <0.3.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/co-request/0.2.1.tgz"
+    },
+    "combined-stream": {
+      "version": "1.0.5",
+      "from": "combined-stream@>=1.0.5 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/combined-stream/1.0.5.tgz"
+    },
+    "commander": {
+      "version": "2.9.0",
+      "from": "commander@>=2.9.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/commander/2.9.0.tgz"
+    },
+    "connect-history-api-fallback": {
+      "version": "1.2.0",
+      "from": "connect-history-api-fallback@>=1.1.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/connect-history-api-fallback/1.2.0.tgz"
+    },
+    "content-disposition": {
+      "version": "0.5.1",
+      "from": "content-disposition@>=0.5.0 <0.6.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/content-disposition/0.5.1.tgz"
+    },
+    "content-type": {
+      "version": "1.0.2",
+      "from": "content-type@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/content-type/1.0.2.tgz"
+    },
+    "cookies": {
+      "version": "0.6.1",
+      "from": "cookies@>=0.6.1 <0.7.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/cookies/0.6.1.tgz"
+    },
+    "core-js": {
+      "version": "1.2.6",
+      "from": "core-js@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/core-js/1.2.6.tgz"
+    },
+    "core-util-is": {
+      "version": "1.0.2",
+      "from": "core-util-is@>=1.0.0 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/core-util-is/1.0.2.tgz"
+    },
+    "cryptiles": {
+      "version": "2.0.5",
+      "from": "cryptiles@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/cryptiles/2.0.5.tgz"
+    },
+    "dashdash": {
+      "version": "1.13.1",
+      "from": "dashdash@>=1.12.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/dashdash/1.13.1.tgz",
+      "dependencies": {
+        "assert-plus": {
+          "version": "1.0.0",
+          "from": "assert-plus@>=1.0.0 <2.0.0",
+          "resolved": "http://127.0.0.1:5080/tarballs/assert-plus/1.0.0.tgz"
+        }
+      }
+    },
+    "date-arithmetic": {
+      "version": "3.0.1",
+      "from": "date-arithmetic@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/date-arithmetic/3.0.1.tgz"
+    },
+    "debug": {
+      "version": "2.2.0",
+      "from": "debug@>=2.2.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/debug/2.2.0.tgz"
+    },
+    "deep-equal": {
+      "version": "1.0.1",
+      "from": "deep-equal@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/deep-equal/1.0.1.tgz"
+    },
+    "delayed-stream": {
+      "version": "1.0.0",
+      "from": "delayed-stream@>=1.0.0 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/delayed-stream/1.0.0.tgz"
+    },
+    "delegates": {
+      "version": "1.0.0",
+      "from": "delegates@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/delegates/1.0.0.tgz"
+    },
+    "depd": {
+      "version": "1.1.0",
+      "from": "depd@>=1.1.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/depd/1.1.0.tgz"
+    },
+    "destroy": {
+      "version": "1.0.4",
+      "from": "destroy@>=1.0.3 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/destroy/1.0.4.tgz"
+    },
+    "dom-helpers": {
+      "version": "2.4.0",
+      "from": "dom-helpers@>=2.3.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/dom-helpers/2.4.0.tgz"
+    },
+    "ecc-jsbn": {
+      "version": "0.1.1",
+      "from": "ecc-jsbn@>=0.1.1 <0.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/ecc-jsbn/0.1.1.tgz",
+      "optional": true
+    },
+    "ee-first": {
+      "version": "1.1.1",
+      "from": "ee-first@1.1.1",
+      "resolved": "http://127.0.0.1:5080/tarballs/ee-first/1.1.1.tgz"
+    },
+    "element-class": {
+      "version": "0.2.2",
+      "from": "element-class@>=0.2.0 <0.3.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/element-class/0.2.2.tgz"
+    },
+    "encoding": {
+      "version": "0.1.12",
+      "from": "encoding@>=0.1.11 <0.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/encoding/0.1.12.tgz"
+    },
+    "error-inject": {
+      "version": "1.0.0",
+      "from": "error-inject@>=1.0.0 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/error-inject/1.0.0.tgz"
+    },
+    "es6-promise": {
+      "version": "3.1.2",
+      "from": "es6-promise@>=3.1.2 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/es6-promise/3.1.2.tgz"
+    },
+    "escape-html": {
+      "version": "1.0.3",
+      "from": "escape-html@>=1.0.1 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/escape-html/1.0.3.tgz"
+    },
+    "escape-string-regexp": {
+      "version": "1.0.5",
+      "from": "escape-string-regexp@>=1.0.2 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/escape-string-regexp/1.0.5.tgz"
+    },
+    "exenv": {
+      "version": "1.2.0",
+      "from": "exenv@1.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/exenv/1.2.0.tgz"
+    },
+    "extend": {
+      "version": "3.0.0",
+      "from": "extend@>=3.0.0 <3.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/extend/3.0.0.tgz"
+    },
+    "extsprintf": {
+      "version": "1.0.2",
+      "from": "extsprintf@1.0.2",
+      "resolved": "http://127.0.0.1:5080/tarballs/extsprintf/1.0.2.tgz"
+    },
+    "fbjs": {
+      "version": "0.8.2",
+      "from": "fbjs@>=0.8.0 <0.9.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/fbjs/0.8.2.tgz"
+    },
+    "forever-agent": {
+      "version": "0.6.1",
+      "from": "forever-agent@>=0.6.1 <0.7.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/forever-agent/0.6.1.tgz"
+    },
+    "form-data": {
+      "version": "1.0.0-rc4",
+      "from": "form-data@>=1.0.0-rc3 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/form-data/1.0.0-rc4.tgz"
+    },
+    "fresh": {
+      "version": "0.3.0",
+      "from": "fresh@>=0.3.0 <0.4.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/fresh/0.3.0.tgz"
+    },
+    "generate-function": {
+      "version": "2.0.0",
+      "from": "generate-function@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/generate-function/2.0.0.tgz"
+    },
+    "generate-object-property": {
+      "version": "1.2.0",
+      "from": "generate-object-property@>=1.1.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/generate-object-property/1.2.0.tgz"
+    },
+    "getpass": {
+      "version": "0.1.6",
+      "from": "getpass@>=0.1.1 <0.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/getpass/0.1.6.tgz",
+      "dependencies": {
+        "assert-plus": {
+          "version": "1.0.0",
+          "from": "assert-plus@>=1.0.0 <2.0.0",
+          "resolved": "http://127.0.0.1:5080/tarballs/assert-plus/1.0.0.tgz"
+        }
+      }
+    },
+    "graceful-readlink": {
+      "version": "1.0.1",
+      "from": "graceful-readlink@>=1.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/graceful-readlink/1.0.1.tgz"
+    },
+    "har-validator": {
+      "version": "2.0.6",
+      "from": "har-validator@>=2.0.6 <2.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/har-validator/2.0.6.tgz"
+    },
+    "has-ansi": {
+      "version": "2.0.0",
+      "from": "has-ansi@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/has-ansi/2.0.0.tgz"
+    },
+    "hawk": {
+      "version": "3.1.3",
+      "from": "hawk@>=3.1.3 <3.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/hawk/3.1.3.tgz"
+    },
+    "history": {
+      "version": "2.1.1",
+      "from": "history@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/history/2.1.1.tgz"
+    },
+    "hoek": {
+      "version": "2.16.3",
+      "from": "hoek@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/hoek/2.16.3.tgz"
+    },
+    "hoist-non-react-statics": {
+      "version": "1.0.5",
+      "from": "hoist-non-react-statics@>=1.0.3 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/hoist-non-react-statics/1.0.5.tgz"
+    },
+    "http-assert": {
+      "version": "1.2.0",
+      "from": "http-assert@>=1.1.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/http-assert/1.2.0.tgz"
+    },
+    "http-errors": {
+      "version": "1.4.0",
+      "from": "http-errors@>=1.2.8 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/http-errors/1.4.0.tgz"
+    },
+    "http-signature": {
+      "version": "1.1.1",
+      "from": "http-signature@>=1.1.0 <1.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/http-signature/1.1.1.tgz"
+    },
+    "iconv-lite": {
+      "version": "0.4.13",
+      "from": "iconv-lite@>=0.4.13 <0.5.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/iconv-lite/0.4.13.tgz"
+    },
+    "inherits": {
+      "version": "2.0.1",
+      "from": "inherits@2.0.1",
+      "resolved": "http://127.0.0.1:5080/tarballs/inherits/2.0.1.tgz"
+    },
+    "invariant": {
+      "version": "2.2.1",
+      "from": "invariant@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/invariant/2.2.1.tgz"
+    },
+    "is-generator-function": {
+      "version": "1.0.3",
+      "from": "is-generator-function@>=1.0.3 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/is-generator-function/1.0.3.tgz"
+    },
+    "is-my-json-valid": {
+      "version": "2.13.1",
+      "from": "is-my-json-valid@>=2.12.4 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/is-my-json-valid/2.13.1.tgz"
+    },
+    "is-property": {
+      "version": "1.0.2",
+      "from": "is-property@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/is-property/1.0.2.tgz"
+    },
+    "is-stream": {
+      "version": "1.1.0",
+      "from": "is-stream@>=1.0.1 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/is-stream/1.1.0.tgz"
+    },
+    "is-typedarray": {
+      "version": "1.0.0",
+      "from": "is-typedarray@>=1.0.0 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/is-typedarray/1.0.0.tgz"
+    },
+    "isarray": {
+      "version": "1.0.0",
+      "from": "isarray@>=1.0.0 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/isarray/1.0.0.tgz"
+    },
+    "isomorphic-fetch": {
+      "version": "2.2.1",
+      "from": "isomorphic-fetch@>=2.2.1 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/isomorphic-fetch/2.2.1.tgz"
+    },
+    "isstream": {
+      "version": "0.1.2",
+      "from": "isstream@>=0.1.2 <0.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/isstream/0.1.2.tgz"
+    },
+    "jodid25519": {
+      "version": "1.0.2",
+      "from": "jodid25519@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/jodid25519/1.0.2.tgz",
+      "optional": true
+    },
+    "js-tokens": {
+      "version": "1.0.3",
+      "from": "js-tokens@>=1.0.1 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/js-tokens/1.0.3.tgz"
+    },
+    "jsbn": {
+      "version": "0.1.0",
+      "from": "jsbn@>=0.1.0 <0.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/jsbn/0.1.0.tgz",
+      "optional": true
+    },
+    "json-schema": {
+      "version": "0.2.2",
+      "from": "json-schema@0.2.2",
+      "resolved": "http://127.0.0.1:5080/tarballs/json-schema/0.2.2.tgz"
+    },
+    "json-stringify-safe": {
+      "version": "5.0.1",
+      "from": "json-stringify-safe@>=5.0.1 <5.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/json-stringify-safe/5.0.1.tgz"
+    },
+    "jsonpointer": {
+      "version": "2.0.0",
+      "from": "jsonpointer@2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/jsonpointer/2.0.0.tgz"
+    },
+    "jsprim": {
+      "version": "1.2.2",
+      "from": "jsprim@>=1.2.2 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/jsprim/1.2.2.tgz"
+    },
+    "keygrip": {
+      "version": "1.0.1",
+      "from": "keygrip@>=1.0.0 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/keygrip/1.0.1.tgz"
+    },
+    "koa": {
+      "version": "2.0.0",
+      "from": "koa@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/koa/2.0.0.tgz"
+    },
+    "koa-compose": {
+      "version": "3.1.0",
+      "from": "koa-compose@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/koa-compose/3.1.0.tgz"
+    },
+    "koa-connect-history-api-fallback": {
+      "version": "0.3.0",
+      "from": "koa-connect-history-api-fallback@>=0.3.0 <0.4.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/koa-connect-history-api-fallback/0.3.0.tgz"
+    },
+    "koa-convert": {
+      "version": "1.2.0",
+      "from": "koa-convert@>=1.2.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/koa-convert/1.2.0.tgz"
+    },
+    "koa-is-json": {
+      "version": "1.0.0",
+      "from": "koa-is-json@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/koa-is-json/1.0.0.tgz"
+    },
+    "koa-proxy": {
+      "version": "0.6.0",
+      "from": "koa-proxy@>=0.6.0 <0.7.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/koa-proxy/0.6.0.tgz",
+      "dependencies": {
+        "iconv-lite": {
+          "version": "0.2.11",
+          "from": "iconv-lite@>=0.2.11 <0.3.0",
+          "resolved": "http://127.0.0.1:5080/tarballs/iconv-lite/0.2.11.tgz"
+        }
+      }
+    },
+    "koa-send": {
+      "version": "3.1.1",
+      "from": "koa-send@>=3.1.0 <3.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/koa-send/3.1.1.tgz"
+    },
+    "koa-static": {
+      "version": "2.0.0",
+      "from": "koa-static@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/koa-static/2.0.0.tgz"
+    },
+    "lodash": {
+      "version": "4.12.0",
+      "from": "lodash@>=4.12.0 <5.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash/4.12.0.tgz"
+    },
+    "lodash-es": {
+      "version": "4.12.0",
+      "from": "lodash-es@>=4.2.1 <5.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash-es/4.12.0.tgz"
+    },
+    "lodash._baseassign": {
+      "version": "3.2.0",
+      "from": "lodash._baseassign@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash._baseassign/3.2.0.tgz"
+    },
+    "lodash._basecopy": {
+      "version": "3.0.1",
+      "from": "lodash._basecopy@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash._basecopy/3.0.1.tgz"
+    },
+    "lodash._bindcallback": {
+      "version": "3.0.1",
+      "from": "lodash._bindcallback@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash._bindcallback/3.0.1.tgz"
+    },
+    "lodash._createassigner": {
+      "version": "3.1.1",
+      "from": "lodash._createassigner@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash._createassigner/3.1.1.tgz"
+    },
+    "lodash._getnative": {
+      "version": "3.9.1",
+      "from": "lodash._getnative@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash._getnative/3.9.1.tgz"
+    },
+    "lodash._isiterateecall": {
+      "version": "3.0.9",
+      "from": "lodash._isiterateecall@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash._isiterateecall/3.0.9.tgz"
+    },
+    "lodash.assign": {
+      "version": "3.2.0",
+      "from": "lodash.assign@>=3.2.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash.assign/3.2.0.tgz"
+    },
+    "lodash.isarguments": {
+      "version": "3.0.8",
+      "from": "lodash.isarguments@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash.isarguments/3.0.8.tgz"
+    },
+    "lodash.isarray": {
+      "version": "3.0.4",
+      "from": "lodash.isarray@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash.isarray/3.0.4.tgz"
+    },
+    "lodash.keys": {
+      "version": "3.1.2",
+      "from": "lodash.keys@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash.keys/3.1.2.tgz"
+    },
+    "lodash.restparam": {
+      "version": "3.6.1",
+      "from": "lodash.restparam@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/lodash.restparam/3.6.1.tgz"
+    },
+    "loose-envify": {
+      "version": "1.1.0",
+      "from": "loose-envify@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/loose-envify/1.1.0.tgz"
+    },
+    "media-typer": {
+      "version": "0.3.0",
+      "from": "media-typer@0.3.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/media-typer/0.3.0.tgz"
+    },
+    "mime-db": {
+      "version": "1.23.0",
+      "from": "mime-db@>=1.23.0 <1.24.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/mime-db/1.23.0.tgz"
+    },
+    "mime-types": {
+      "version": "2.1.11",
+      "from": "mime-types@>=2.0.7 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/mime-types/2.1.11.tgz"
+    },
+    "moment": {
+      "version": "2.13.0",
+      "from": "moment@>=2.13.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/moment/2.13.0.tgz"
+    },
+    "ms": {
+      "version": "0.7.1",
+      "from": "ms@0.7.1",
+      "resolved": "http://127.0.0.1:5080/tarballs/ms/0.7.1.tgz"
+    },
+    "mz": {
+      "version": "2.4.0",
+      "from": "mz@>=2.3.1 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/mz/2.4.0.tgz"
+    },
+    "negotiator": {
+      "version": "0.6.1",
+      "from": "negotiator@0.6.1",
+      "resolved": "http://127.0.0.1:5080/tarballs/negotiator/0.6.1.tgz"
+    },
+    "node-fetch": {
+      "version": "1.5.2",
+      "from": "node-fetch@>=1.0.1 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/node-fetch/1.5.2.tgz"
+    },
+    "node-uuid": {
+      "version": "1.4.7",
+      "from": "node-uuid@>=1.4.7 <1.5.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/node-uuid/1.4.7.tgz"
+    },
+    "oauth-sign": {
+      "version": "0.8.2",
+      "from": "oauth-sign@>=0.8.1 <0.9.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/oauth-sign/0.8.2.tgz"
+    },
+    "object-assign": {
+      "version": "4.1.0",
+      "from": "object-assign@>=4.0.1 <5.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/object-assign/4.1.0.tgz"
+    },
+    "on-finished": {
+      "version": "2.3.0",
+      "from": "on-finished@>=2.1.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/on-finished/2.3.0.tgz"
+    },
+    "only": {
+      "version": "0.0.2",
+      "from": "only@0.0.2",
+      "resolved": "http://127.0.0.1:5080/tarballs/only/0.0.2.tgz"
+    },
+    "parseurl": {
+      "version": "1.3.1",
+      "from": "parseurl@>=1.3.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/parseurl/1.3.1.tgz"
+    },
+    "path-is-absolute": {
+      "version": "1.0.0",
+      "from": "path-is-absolute@1.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/path-is-absolute/1.0.0.tgz"
+    },
+    "pinkie": {
+      "version": "2.0.4",
+      "from": "pinkie@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/pinkie/2.0.4.tgz"
+    },
+    "pinkie-promise": {
+      "version": "2.0.1",
+      "from": "pinkie-promise@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/pinkie-promise/2.0.1.tgz"
+    },
+    "process-nextick-args": {
+      "version": "1.0.7",
+      "from": "process-nextick-args@>=1.0.6 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/process-nextick-args/1.0.7.tgz"
+    },
+    "promise": {
+      "version": "7.1.1",
+      "from": "promise@>=7.1.1 <8.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/promise/7.1.1.tgz"
+    },
+    "qs": {
+      "version": "6.1.0",
+      "from": "qs@>=6.1.0 <6.2.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/qs/6.1.0.tgz"
+    },
+    "query-string": {
+      "version": "3.0.3",
+      "from": "query-string@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/query-string/3.0.3.tgz"
+    },
+    "react": {
+      "version": "15.0.2",
+      "from": "react@>=15.0.2 <16.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react/15.0.2.tgz"
+    },
+    "react-big-calendar": {
+      "version": "0.9.11",
+      "from": "react-big-calendar@>=0.9.11 <0.10.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react-big-calendar/0.9.11.tgz",
+      "dependencies": {
+        "lodash": {
+          "version": "3.10.1",
+          "from": "lodash@>=3.10.1 <4.0.0",
+          "resolved": "http://127.0.0.1:5080/tarballs/lodash/3.10.1.tgz"
+        }
+      }
+    },
+    "react-dom": {
+      "version": "15.0.2",
+      "from": "react-dom@>=15.0.2 <16.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react-dom/15.0.2.tgz"
+    },
+    "react-modal": {
+      "version": "1.2.1",
+      "from": "react-modal@>=1.2.1 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react-modal/1.2.1.tgz"
+    },
+    "react-overlays": {
+      "version": "0.6.3",
+      "from": "react-overlays@>=0.6.0 <0.7.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react-overlays/0.6.3.tgz"
+    },
+    "react-prop-types": {
+      "version": "0.2.2",
+      "from": "react-prop-types@>=0.2.1 <0.3.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react-prop-types/0.2.2.tgz"
+    },
+    "react-redux": {
+      "version": "4.4.5",
+      "from": "react-redux@>=4.0.0 <5.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react-redux/4.4.5.tgz"
+    },
+    "react-router": {
+      "version": "2.4.0",
+      "from": "react-router@>=2.4.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react-router/2.4.0.tgz"
+    },
+    "react-router-redux": {
+      "version": "4.0.4",
+      "from": "react-router-redux@>=4.0.0 <5.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/react-router-redux/4.0.4.tgz"
+    },
+    "readable-stream": {
+      "version": "2.0.6",
+      "from": "readable-stream@>=2.0.5 <2.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/readable-stream/2.0.6.tgz"
+    },
+    "redux": {
+      "version": "3.5.2",
+      "from": "redux@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/redux/3.5.2.tgz"
+    },
+    "redux-ignore": {
+      "version": "1.2.3",
+      "from": "redux-ignore@>=1.2.3 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/redux-ignore/1.2.3.tgz"
+    },
+    "redux-thunk": {
+      "version": "2.1.0",
+      "from": "redux-thunk@>=2.1.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/redux-thunk/2.1.0.tgz"
+    },
+    "request": {
+      "version": "2.72.0",
+      "from": "request@*",
+      "resolved": "http://127.0.0.1:5080/tarballs/request/2.72.0.tgz"
+    },
+    "reselect": {
+      "version": "2.5.1",
+      "from": "reselect@>=2.3.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/reselect/2.5.1.tgz"
+    },
+    "resolve-path": {
+      "version": "1.3.1",
+      "from": "resolve-path@>=1.3.1 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/resolve-path/1.3.1.tgz"
+    },
+    "sntp": {
+      "version": "1.0.9",
+      "from": "sntp@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/sntp/1.0.9.tgz"
+    },
+    "sshpk": {
+      "version": "1.8.3",
+      "from": "sshpk@>=1.7.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/sshpk/1.8.3.tgz",
+      "dependencies": {
+        "assert-plus": {
+          "version": "1.0.0",
+          "from": "assert-plus@>=1.0.0 <2.0.0",
+          "resolved": "http://127.0.0.1:5080/tarballs/assert-plus/1.0.0.tgz"
+        }
+      }
+    },
+    "statuses": {
+      "version": "1.2.1",
+      "from": "statuses@>=1.2.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/statuses/1.2.1.tgz"
+    },
+    "strict-uri-encode": {
+      "version": "1.1.0",
+      "from": "strict-uri-encode@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/strict-uri-encode/1.1.0.tgz"
+    },
+    "string_decoder": {
+      "version": "0.10.31",
+      "from": "string_decoder@>=0.10.0 <0.11.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/string_decoder/0.10.31.tgz"
+    },
+    "stringstream": {
+      "version": "0.0.5",
+      "from": "stringstream@>=0.0.4 <0.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/stringstream/0.0.5.tgz"
+    },
+    "strip-ansi": {
+      "version": "3.0.1",
+      "from": "strip-ansi@>=3.0.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/strip-ansi/3.0.1.tgz"
+    },
+    "supports-color": {
+      "version": "2.0.0",
+      "from": "supports-color@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/supports-color/2.0.0.tgz"
+    },
+    "symbol-observable": {
+      "version": "0.2.4",
+      "from": "symbol-observable@>=0.2.3 <0.3.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/symbol-observable/0.2.4.tgz"
+    },
+    "thenify": {
+      "version": "3.2.0",
+      "from": "thenify@>=3.1.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/thenify/3.2.0.tgz"
+    },
+    "thenify-all": {
+      "version": "1.6.0",
+      "from": "thenify-all@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/thenify-all/1.6.0.tgz"
+    },
+    "tough-cookie": {
+      "version": "2.2.2",
+      "from": "tough-cookie@>=2.2.0 <2.3.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/tough-cookie/2.2.2.tgz"
+    },
+    "tunnel-agent": {
+      "version": "0.4.3",
+      "from": "tunnel-agent@>=0.4.1 <0.5.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/tunnel-agent/0.4.3.tgz"
+    },
+    "tweetnacl": {
+      "version": "0.13.3",
+      "from": "tweetnacl@>=0.13.0 <0.14.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/tweetnacl/0.13.3.tgz",
+      "optional": true
+    },
+    "type-is": {
+      "version": "1.6.12",
+      "from": "type-is@>=1.5.5 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/type-is/1.6.12.tgz"
+    },
+    "ua-parser-js": {
+      "version": "0.7.10",
+      "from": "ua-parser-js@>=0.7.9 <0.8.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/ua-parser-js/0.7.10.tgz"
+    },
+    "uncontrollable": {
+      "version": "3.2.4",
+      "from": "uncontrollable@>=3.1.0 <4.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/uncontrollable/3.2.4.tgz"
+    },
+    "util-deprecate": {
+      "version": "1.0.2",
+      "from": "util-deprecate@>=1.0.1 <1.1.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/util-deprecate/1.0.2.tgz"
+    },
+    "uuid": {
+      "version": "2.0.2",
+      "from": "uuid@>=2.0.2 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/uuid/2.0.2.tgz"
+    },
+    "vary": {
+      "version": "1.1.0",
+      "from": "vary@>=1.0.0 <2.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/vary/1.1.0.tgz"
+    },
+    "verror": {
+      "version": "1.3.6",
+      "from": "verror@1.3.6",
+      "resolved": "http://127.0.0.1:5080/tarballs/verror/1.3.6.tgz"
+    },
+    "warning": {
+      "version": "2.1.0",
+      "from": "warning@>=2.0.0 <3.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/warning/2.1.0.tgz"
+    },
+    "whatwg-fetch": {
+      "version": "1.0.0",
+      "from": "whatwg-fetch@>=0.10.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/whatwg-fetch/1.0.0.tgz"
+    },
+    "xtend": {
+      "version": "4.0.1",
+      "from": "xtend@>=4.0.0 <5.0.0",
+      "resolved": "http://127.0.0.1:5080/tarballs/xtend/4.0.1.tgz"
+    }
+  }
+}
